@@ -1,0 +1,34 @@
+build
+runMain
+runMain commands.GetPokemonDnDStats
+compile
+runMain
+runMain commands.GetPokemonDnDStats
+compile
+runMain commands.GetPokemonDnDStats
+compile
+runMain commands.GenerateWildPokemonEncounter
+compile
+runMain commands.GenerateWildPokemonEncounter
+compile
+runMain commands.GetPokemonDnDStats Charizard
+compile
+runMain commands.GetPokemonDnDStats Charizard
+compile
+runMain commands.GetPokemonDnDStats Charizard
+compile
+runMain commands.GetPokemonDnDStats Charizard
+compile
+runMain commands.GetPokemonDnDStats Charizard
+compile
+runMain commands.GetPokemonDnDStats Charizard
+compile
+runMain commands.GetPokemonDnDStats Charizard
+runMain commands.GetPokemonDnDStats Totodile
+runMain commands.GetPokemonDnDStats Eeve
+runMain commands.GetPokemonDnDStats Eevee
+runMain commands.GetPokemonDnDStats Quagsire
+runMain commands.GetPokemonDnDStats Jolteon
+runMain commands.GetPokemonDnDStats Charizard
+runMain commands.GetPokemonDnDStats Oddish
+runMain commands.GetPokemonDnDStats Vaporeon
