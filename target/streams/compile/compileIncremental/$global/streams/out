@@ -2,14 +2,45 @@
 [0m[[0mdebug[0m] [0mInitial source changes: [0m
 [0m[[0mdebug[0m] [0m	removed:Set()[0m
 [0m[[0mdebug[0m] [0m	added: Set()[0m
-[0m[[0mdebug[0m] [0m	modified: Set()[0m
+[0m[[0mdebug[0m] [0m	modified: Set(/home/zack/Github/PokemonDnD/src/main/scala/models/Stats.scala, /home/zack/Github/PokemonDnD/src/main/scala/commands/GetPokemonDnDStats.scala)[0m
 [0m[[0mdebug[0m] [0mRemoved products: Set()[0m
 [0m[[0mdebug[0m] [0mExternal API changes: API Changes: Set()[0m
 [0m[[0mdebug[0m] [0mModified binary dependencies: Set()[0m
-[0m[[0mdebug[0m] [0mInitial directly invalidated sources: Set()[0m
+[0m[[0mdebug[0m] [0mInitial directly invalidated sources: Set(/home/zack/Github/PokemonDnD/src/main/scala/models/Stats.scala, /home/zack/Github/PokemonDnD/src/main/scala/commands/GetPokemonDnDStats.scala)[0m
 [0m[[0mdebug[0m] [0m[0m
 [0m[[0mdebug[0m] [0mSources indirectly invalidated by:[0m
 [0m[[0mdebug[0m] [0m	product: Set()[0m
 [0m[[0mdebug[0m] [0m	binary dep: Set()[0m
 [0m[[0mdebug[0m] [0m	external source: Set()[0m
-[0m[[0mdebug[0m] [0mAll initially invalidated sources: Set()[0m
+[0m[[0mdebug[0m] [0mAll initially invalidated sources: Set(/home/zack/Github/PokemonDnD/src/main/scala/models/Stats.scala, /home/zack/Github/PokemonDnD/src/main/scala/commands/GetPokemonDnDStats.scala)[0m
+[0m[[0minfo[0m] [0mCompiling 2 Scala sources to /home/zack/Github/PokemonDnD/target/scala-2.11/classes...[0m
+[0m[[0mdebug[0m] [0mGetting compiler-interface from component compiler for Scala 2.11.8[0m
+[0m[[0mdebug[0m] [0mGetting compiler-interface from component compiler for Scala 2.11.8[0m
+[0m[[0mdebug[0m] [0mRunning cached compiler 477dad57, interfacing (CompilerInterface) with Scala compiler version 2.11.8[0m
+[0m[[0mdebug[0m] [0mCalling Scala compiler with arguments  (CompilerInterface):[0m
+[0m[[0mdebug[0m] [0m	-bootclasspath[0m
+[0m[[0mdebug[0m] [0m	/usr/lib/jvm/java-8-oracle/jre/lib/resources.jar:/usr/lib/jvm/java-8-oracle/jre/lib/rt.jar:/usr/lib/jvm/java-8-oracle/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-8-oracle/jre/lib/jsse.jar:/usr/lib/jvm/java-8-oracle/jre/lib/jce.jar:/usr/lib/jvm/java-8-oracle/jre/lib/charsets.jar:/usr/lib/jvm/java-8-oracle/jre/lib/jfr.jar:/usr/lib/jvm/java-8-oracle/jre/classes:/home/zack/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.11.8.jar[0m
+[0m[[0mdebug[0m] [0m	-classpath[0m
+[0m[[0mdebug[0m] [0m	/home/zack/Github/PokemonDnD/target/scala-2.11/classes:/home/zack/.ivy2/cache/net.ruippeixotog/scala-scraper_2.11/jars/scala-scraper_2.11-1.0.0.jar:/home/zack/.ivy2/cache/org.scala-lang/scala-compiler/jars/scala-compiler-2.11.8.jar:/home/zack/.ivy2/cache/org.scala-lang/scala-reflect/jars/scala-reflect-2.11.8.jar:/home/zack/.ivy2/cache/org.scala-lang.modules/scala-xml_2.11/bundles/scala-xml_2.11-1.0.4.jar:/home/zack/.ivy2/cache/org.scala-lang.modules/scala-parser-combinators_2.11/bundles/scala-parser-combinators_2.11-1.0.4.jar:/home/zack/.ivy2/cache/com.github.nscala-time/nscala-time_2.11/jars/nscala-time_2.11-2.12.0.jar:/home/zack/.ivy2/cache/joda-time/joda-time/jars/joda-time-2.9.3.jar:/home/zack/.ivy2/cache/org.joda/joda-convert/jars/joda-convert-1.2.jar:/home/zack/.ivy2/cache/com.typesafe/config/bundles/config-1.3.0.jar:/home/zack/.ivy2/cache/net.sourceforge.htmlunit/htmlunit/jars/htmlunit-2.20.jar:/home/zack/.ivy2/cache/xalan/xalan/jars/xalan-2.7.2.jar:/home/zack/.ivy2/cache/xalan/serializer/jars/serializer-2.7.2.jar:/home/zack/.ivy2/cache/org.apache.commons/commons-lang3/jars/commons-lang3-3.4.jar:/home/zack/.ivy2/cache/org.apache.httpcomponents/httpclient/jars/httpclient-4.5.2.jar:/home/zack/.ivy2/cache/org.apache.httpcomponents/httpcore/jars/httpcore-4.4.4.jar:/home/zack/.ivy2/cache/commons-logging/commons-logging/jars/commons-logging-1.2.jar:/home/zack/.ivy2/cache/org.apache.httpcomponents/httpmime/jars/httpmime-4.5.2.jar:/home/zack/.ivy2/cache/commons-codec/commons-codec/jars/commons-codec-1.10.jar:/home/zack/.ivy2/cache/net.sourceforge.htmlunit/htmlunit-core-js/jars/htmlunit-core-js-2.17.jar:/home/zack/.ivy2/cache/xerces/xercesImpl/jars/xercesImpl-2.11.0.jar:/home/zack/.ivy2/cache/xml-apis/xml-apis/jars/xml-apis-1.4.01.jar:/home/zack/.ivy2/cache/net.sourceforge.nekohtml/nekohtml/jars/nekohtml-1.9.22.jar:/home/zack/.ivy2/cache/net.sourceforge.cssparser/cssparser/jars/cssparser-0.9.18.jar:/home/zack/.ivy2/cache/org.w3c.css/sac/jars/sac-1.3.jar:/home/zack/.ivy2/cache/commons-io/commons-io/jars/commons-io-2.4.jar:/home/zack/.ivy2/cache/org.eclipse.jetty.websocket/websocket-client/jars/websocket-client-9.2.15.v20160210.jar:/home/zack/.ivy2/cache/org.eclipse.jetty/jetty-util/jars/jetty-util-9.2.15.v20160210.jar:/home/zack/.ivy2/cache/org.eclipse.jetty/jetty-io/jars/jetty-io-9.2.15.v20160210.jar:/home/zack/.ivy2/cache/org.eclipse.jetty.websocket/websocket-common/jars/websocket-common-9.2.15.v20160210.jar:/home/zack/.ivy2/cache/org.eclipse.jetty.websocket/websocket-api/jars/websocket-api-9.2.15.v20160210.jar:/home/zack/.ivy2/cache/org.jsoup/jsoup/jars/jsoup-1.8.3.jar:/home/zack/.ivy2/cache/org.scalaz/scalaz-core_2.11/bundles/scalaz-core_2.11-7.2.2.jar[0m
+[0m[[0mdebug[0m] [0mScala compilation took 8.836502189 s[0m
+[0m[[0mdebug[0m] [0mInvalidating /home/zack/Github/PokemonDnD/src/main/scala/models/Stats.scala...[0m
+[0m[[0mdebug[0m] [0mInvalidating (transitively) by inheritance from /home/zack/Github/PokemonDnD/src/main/scala/models/Stats.scala...[0m
+[0m[[0mdebug[0m] [0mInitial set of included nodes: Set(/home/zack/Github/PokemonDnD/src/main/scala/models/Stats.scala)[0m
+[0m[[0mdebug[0m] [0mInvalidated by transitive inheritance dependency: Set(/home/zack/Github/PokemonDnD/src/main/scala/models/Stats.scala)[0m
+[0m[[0mdebug[0m] [0mThe /home/zack/Github/PokemonDnD/src/main/scala/models/Stats.scala source file has the following regular definitions changed:[0m
+[0m[[0mdebug[0m] [0m	PokemonMove, notify, name, wait, rolledMoves, copy$default$2, $asInstanceOf, pokemonToDndStats$default$3, productArity, equals, asInstanceOf, prettyPrint, synchronized, $isInstanceOf, copy$default$15, canEqual, rollForMoves, productPrefix, availableMoves, notifyAll, isInstanceOf, <init>, ==, copy$default$14, pokemonToDndStats, clone, copy, toString, !=, getClass, copy$default$1, pokemonToDndStats$default$4, ne, eq, productIterator, isDefault, ##, finalize, productElement, hashCode, level.[0m
+[0m[[0mdebug[0m] [0mAll member reference dependencies will be considered within this context.[0m
+[0m[[0mdebug[0m] [0mThe following modified names cause invalidation of /home/zack/Github/PokemonDnD/src/main/scala/commands/GetPokemonDnDStats.scala: Set(PokemonMove, asInstanceOf, prettyPrint, isInstanceOf, <init>, ==, pokemonToDndStats, toString, ne, level)[0m
+[0m[[0mdebug[0m] [0mInvalidating /home/zack/Github/PokemonDnD/src/main/scala/commands/GetPokemonDnDStats.scala...[0m
+[0m[[0mdebug[0m] [0mInvalidating (transitively) by inheritance from /home/zack/Github/PokemonDnD/src/main/scala/commands/GetPokemonDnDStats.scala...[0m
+[0m[[0mdebug[0m] [0mInitial set of included nodes: Set(/home/zack/Github/PokemonDnD/src/main/scala/commands/GetPokemonDnDStats.scala)[0m
+[0m[[0mdebug[0m] [0mInvalidated by transitive inheritance dependency: Set(/home/zack/Github/PokemonDnD/src/main/scala/commands/GetPokemonDnDStats.scala)[0m
+[0m[[0mdebug[0m] [0mThe /home/zack/Github/PokemonDnD/src/main/scala/commands/GetPokemonDnDStats.scala source file has the following regular definitions changed:[0m
+[0m[[0mdebug[0m] [0m	getPokemonMovesFromDoc.[0m
+[0m[[0mdebug[0m] [0mAll member reference dependencies will be considered within this context.[0m
+[0m[[0mdebug[0m] [0mNew invalidations:[0m
+[0m[[0mdebug[0m] [0m	Set()[0m
+[0m[[0mdebug[0m] [0mInitial set of included nodes: Set()[0m
+[0m[[0mdebug[0m] [0mPreviously invalidated, but (transitively) depend on new invalidations:[0m
+[0m[[0mdebug[0m] [0m	Set()[0m
+[0m[[0mdebug[0m] [0mAll newly invalidated sources after taking into account (previously) recompiled sources:Set()[0m
