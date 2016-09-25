@@ -49,3 +49,10 @@ runMain commands.GetPokemonDnDStats Jolteon
 runMain commands.GetPokemonDnDStats Wobuffet
 runMain commands.GetPokemonDnDStats Wobbuffet
 runMain commands.GetPokemonDnDStats Jolteon
+runMain commands.GetPokemonDnDStats Eevee
+runMain commands.GetPokemonDnDStats Jolteon
+runMain commands.GetPokemonDnDStats lapras
+runMain commands.GetPokemonDnDStats Wobbuffet
+runMain commands.GetPokemonDnDStats Nidoking
+runMain commands.GetPokemonDnDStats Nidoran
+runMain commands.GetPokemonDnDStats Nidoran-f

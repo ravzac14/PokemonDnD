@@ -59,7 +59,7 @@ object GetPokemonDnDStats extends App {
   }
 
   def getPokemonMovesFromDoc(doc: Document): Seq[PokemonMove] = {
-    val movesByLevelTable: Seq[Element] = ((doc >> elementList(".wide-table")).drop(3).head >> elementList("tr")).tail
+    val movesByLevelTable: Seq[Element] = ((doc >> elementList(".wide-table")).head >> elementList("tr")).tail
     movesByLevelTable.map { e =>
       val l: Int = (e >> text(".num")).trim.toInt
       val move: String = (e >> text(".ent-name")).trim
@@ -73,11 +73,13 @@ object GetPokemonDnDStats extends App {
   val doc: Document = browser.get(s"http://pokemondb.net/pokedex/$pokemon")
 
   val pokemonStats = getPokemonStatsFromDoc(doc)
+  val pokemonCR = getPokemonCRFromDoc(doc)
+  val pokemonMoves = getPokemonMovesFromDoc(doc)
   val dndStats = StatTransformers.pokemonToDndStats(
-    pokemonStats,
-    getPokemonCRFromDoc(doc),
-    getPokemonMovesFromDoc(doc),
-    level)
+    p = pokemonStats,
+    cr = pokemonCR,
+    moves = pokemonMoves,
+    level = level)
 
   println()
   println()

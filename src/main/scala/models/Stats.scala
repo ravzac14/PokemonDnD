@@ -3,7 +3,7 @@ package models
 object HitDice extends Enumeration { val d6, d8, d10, d12, d20 = Value }
 
 case class PokemonMove(level: Int, name: String) {
-  def prettyPrint = s"level: level, move: ${name.capitalize}"
+  def prettyPrint = s"level: $level -- ${name.capitalize}"
   def isDefault = name == "tackle" || name == "scratch" || name == "pound"
 }
 
@@ -55,8 +55,8 @@ case class DnDStats(
         |Intelligence: $intelligence
         |Wisdom: $wisdom
         |Charisma: $charisma
-        |All Pokemon Moves: ${availableMoves.map("\n    " + _.prettyPrint)}
-        |Rolled Moves (for this evolution and level): ${rolledMoves.map("\n    " + _.prettyPrint)}""".stripMargin
+        |All Pokemon Moves: ${availableMoves.map("\n    " + _.prettyPrint).mkString("")}
+        |Rolled Moves (for this evolution and level): ${rolledMoves.map("\n    " + _.prettyPrint).mkString("")}""".stripMargin
 }
 
 object StatTransformers {
@@ -163,13 +163,16 @@ object StatTransformers {
 
     val levelCap = level * 5
     val availableMoves = moves.filter(_.level <= levelCap)
-    val base: Seq[PokemonMove] = for (_ <- 0 to level) yield PokemonMove(1, "tackle")
-    base.tail.foldLeft(Seq(base.head)) { case (acc, v) =>
-      var rolledMove = rollForRandomMove(availableMoves)
-      while (rolledMove.isDefault || acc.map(_.name).contains(rolledMove.name)) {
-        rolledMove = rollForRandomMove(availableMoves)
+    if (availableMoves.length <= level + 1) availableMoves
+    else {
+      val base: Seq[PokemonMove] = for (_ <- 0 to level) yield PokemonMove(1, "tackle")
+      base.tail.foldLeft(Seq(base.head)) { case (acc, v) =>
+        var rolledMove = rollForRandomMove(availableMoves)
+        while (rolledMove.isDefault || acc.map(_.name).contains(rolledMove.name)) {
+          rolledMove = rollForRandomMove(availableMoves)
+        }
+        acc :+ rolledMove
       }
-      acc :+ rolledMove
     }
   }
 

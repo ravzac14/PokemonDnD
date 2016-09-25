@@ -2,10 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cc4d87f8-0793-4849-89e7-163cd677b854" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.11/classes/commands/GetPokemonDnDStats$.class" afterPath="$PROJECT_DIR$/target/scala-2.11/classes/commands/GetPokemonDnDStats$.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.11/classes/commands/GetPokemonDnDStats.class" afterPath="$PROJECT_DIR$/target/scala-2.11/classes/commands/GetPokemonDnDStats.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.11/classes/models/StatTransformers$.class" afterPath="$PROJECT_DIR$/target/scala-2.11/classes/models/StatTransformers$.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/commands/GetPokemonDnDStats.scala" afterPath="$PROJECT_DIR$/src/main/scala/commands/GetPokemonDnDStats.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/models/Stats.scala" afterPath="$PROJECT_DIR$/src/main/scala/models/Stats.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/.history" afterPath="$PROJECT_DIR$/target/.history" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/streams/compile/compileIncremental/$global/streams/export" afterPath="$PROJECT_DIR$/target/streams/compile/compileIncremental/$global/streams/export" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/streams/compile/compileIncremental/$global/streams/out" afterPath="$PROJECT_DIR$/target/streams/compile/compileIncremental/$global/streams/out" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/streams/compile/incCompileSetup/$global/streams/inc_compile_2.11" afterPath="$PROJECT_DIR$/target/streams/compile/incCompileSetup/$global/streams/inc_compile_2.11" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/streams/compile/runMain/$global/streams/out" afterPath="$PROJECT_DIR$/target/streams/compile/runMain/$global/streams/out" />
     </list>
     <ignored path="PokemonDnD.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -35,11 +42,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="GetPokemonDnDStats.scala" pinned="false" current-in-tab="true">
+      <file leaf-file-name="GetPokemonDnDStats.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/commands/GetPokemonDnDStats.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.48241207">
-              <caret line="63" column="6" selection-start-line="63" selection-start-column="6" selection-end-line="63" selection-end-column="6" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="61" column="77" selection-start-line="61" selection-start-column="77" selection-end-line="61" selection-end-column="77" />
               <folding>
                 <element signature="e#18#40#0" expanded="true" />
               </folding>
@@ -47,11 +54,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Stats.scala" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Stats.scala" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/scala/models/Stats.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="202" column="22" selection-start-line="202" selection-start-column="22" selection-end-line="202" selection-end-column="22" />
+            <state vertical-scroll-proportion="0.6633166">
+              <caret line="58" column="108" selection-start-line="58" selection-start-column="108" selection-end-line="58" selection-end-column="108" />
               <folding />
             </state>
           </provider>
@@ -803,13 +810,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/net.ruippeixotog/scala-scraper_2.11/srcs/scala-scraper_2.11-1.0.0-sources.jar!/net/ruippeixotog/scalascraper/scraper/HtmlExtractor.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33277026">
-          <caret line="88" column="6" selection-start-line="88" selection-start-column="6" selection-end-line="88" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/lang/Math.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -829,21 +829,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/models/Stats.scala">
+    <entry file="jar://$USER_HOME$/.ivy2/cache/net.ruippeixotog/scala-scraper_2.11/srcs/scala-scraper_2.11-1.0.0-sources.jar!/net/ruippeixotog/scalascraper/scraper/HtmlExtractor.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="202" column="22" selection-start-line="202" selection-start-column="22" selection-end-line="202" selection-end-column="22" />
+        <state vertical-scroll-proportion="0.24288107">
+          <caret line="88" column="6" selection-start-line="88" selection-start-column="6" selection-end-line="88" selection-end-column="6" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/commands/GetPokemonDnDStats.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.48241207">
-          <caret line="63" column="6" selection-start-line="63" selection-start-column="6" selection-end-line="63" selection-end-column="6" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="61" column="77" selection-start-line="61" selection-start-column="77" selection-end-line="61" selection-end-column="77" />
           <folding>
             <element signature="e#18#40#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/models/Stats.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6633166">
+          <caret line="58" column="108" selection-start-line="58" selection-start-column="108" selection-end-line="58" selection-end-column="108" />
+          <folding />
         </state>
       </provider>
     </entry>
