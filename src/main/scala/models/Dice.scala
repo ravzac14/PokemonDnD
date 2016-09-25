@@ -1,5 +1,7 @@
 package models
 
+import models.PokemonMove
+
 object Dice {
   val D20Average = 11
   val D12Average = 7
@@ -23,4 +25,20 @@ object Dice {
   def D8RollOrAverage = Math.max(D8Roll, D8Average)
   def D6RollOrAverage = Math.max(D6Roll, D6Average)
   def D4RollOrAverage = Math.max(D4Roll, D4Average)
+}
+
+object Random {
+  def rollForRandomMove(availableMoves: Seq[PokemonMove]): PokemonMove = {
+    val r = scala.util.Random
+    availableMoves(r.nextInt(availableMoves.length - 1))
+  }
+
+  def rollForRandomPokemon: String = {
+    val r = scala.util.Random
+    val randomNumber = r.nextInt(data.PokemonList.totalPokemon - 1) + 1
+    data.PokemonList.indexMap
+      .find { case (k, v) => k.dropWhile(_ == '0').toInt == randomNumber }
+      .map(_._2)
+      .getOrElse("Togepi") //lol
+  }
 }

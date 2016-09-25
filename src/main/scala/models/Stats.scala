@@ -43,7 +43,7 @@ case class DnDStats(
   def prettyPrint =
     s"""^^^^^^^^^ Pokemon DnD Stats ^^^^^^^^^
         |Level: $level
-        |Challenge Rating: $challengeRating
+        |Challenge Rating (discount this for evolution lines with baby Pokemon or multiple forms): $challengeRating
         |Hit Dice (for this evolution): $hitDice
         |Rolled Max Health: $rolledMaxHp
         |Max Possible HP: $maxPossibleHp
@@ -156,11 +156,6 @@ object StatTransformers {
   }
 
   def rollForMoves(moves: Seq[PokemonMove], level: Int): Seq[PokemonMove] = {
-    def rollForRandomMove(availableMoves: Seq[PokemonMove]): PokemonMove = {
-      val r = scala.util.Random
-      availableMoves(r.nextInt(availableMoves.length - 1))
-    }
-
     val levelCap = level * 5
     val availableMoves = moves.filter(_.level <= levelCap)
     if (availableMoves.length <= level + 1) availableMoves
