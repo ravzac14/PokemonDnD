@@ -1,6 +1,6 @@
-[0m[[0minfo[0m] [0mRunning commands.GetPokemonDnDStats metapod 1[0m
+[0m[[0minfo[0m] [0mRunning commands.GenerateWildPokemonEncounter 15 5[0m
 [0m[[0mdebug[0m] [0mWaiting for threads to exit or System.exit to be called.[0m
-[0m[[0mdebug[0m] [0mWaiting for thread run-main-16 to terminate.[0m
+[0m[[0mdebug[0m] [0mWaiting for thread run-main-9 to terminate.[0m
 [0m[[0mdebug[0m] [0m  Classpath:[0m
 [0m[[0mdebug[0m] [0m	/home/zack/Github/PokemonDnD/target/scala-2.11/classes[0m
 [0m[[0mdebug[0m] [0m	/home/zack/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.11.8.jar[0m
@@ -36,7 +36,7 @@
 [0m[[0mdebug[0m] [0m	/home/zack/.ivy2/cache/org.eclipse.jetty.websocket/websocket-api/jars/websocket-api-9.2.15.v20160210.jar[0m
 [0m[[0mdebug[0m] [0m	/home/zack/.ivy2/cache/org.jsoup/jsoup/jars/jsoup-1.8.3.jar[0m
 [0m[[0mdebug[0m] [0m	/home/zack/.ivy2/cache/org.scalaz/scalaz-core_2.11/bundles/scalaz-core_2.11-7.2.2.jar[0m
-[0m[[0mdebug[0m] [0m	Thread run-main-16 exited.[0m
+[0m[[0mdebug[0m] [0m	Thread run-main-9 exited.[0m
 [0m[[0mdebug[0m] [0mInterrupting remaining threads (should be all daemons).[0m
 [0m[[0mdebug[0m] [0mNot interrupting system thread Thread[Keep-Alive-Timer,8,system][0m
 [0m[[0mdebug[0m] [0mSandboxed run complete..[0m

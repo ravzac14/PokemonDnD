@@ -25,6 +25,7 @@ case class PokemonBaseStats(
 }
 
 case class DnDStats(
+  val name: String,
   val level: Int = 1,
   val challengeRating: Int = 0,
   val evoPointsNeeded: Int = 0,
@@ -43,6 +44,7 @@ case class DnDStats(
   val rolledMoves: Seq[PokemonMove]) {
   def prettyPrint =
     s"""^^^^^^^^^ Pokemon DnD Stats ^^^^^^^^^
+        |Name: ${name.capitalize}
         |Level: $level
         |Challenge Rating (discount this for evolution lines with baby Pokemon or multiple forms): $challengeRating
         |Evolution Points needed for next evolution: ${evoPointsNeeded match { case 0 => "N/A" case e => e.toString }}
@@ -174,6 +176,7 @@ object StatTransformers {
   }
 
   def pokemonToDndStats(
+    name: String,
     p: PokemonBaseStats,
     cr: Int,
     evoLevel: Int,
@@ -188,6 +191,7 @@ object StatTransformers {
     val dndEvoLevel = Math.ceil(evoLevel.toDouble / 5d)
 
     DnDStats(
+      name = name,
       level = level,
       challengeRating = cr,
       evoPointsNeeded = dndEvoLevel.toInt,

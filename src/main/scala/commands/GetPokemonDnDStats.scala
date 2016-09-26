@@ -20,7 +20,7 @@ object GetPokemonDnDStats extends App {
   }
 
   // Doesn't work for eevee-lutions or evolution lines with baby Pokemon
-  def getPokemonCRFromDoc(doc: Document): (Int, Int) = { // (CR, Level for next Evolution)
+  def getPokemonCRFromDoc(doc: Document, pokemon: String): (Int, Int) = { // (CR, Level for next Evolution)
     val maybeEvolution: Option[Element] = (doc >> elementList(".infocard-evo-list")).headOption
     val maybeEvos: Option[Seq[Element]] = maybeEvolution.map(e =>
       (e >> elementList(".infocard-tall")).flatMap(_ >> elementList(".sprite")))
@@ -76,28 +76,31 @@ object GetPokemonDnDStats extends App {
     }
   }
 
-  val pokemon = args.head.trim.toLowerCase
-  require(data.PokemonList.indexMap.values.toSeq.map(_.toLowerCase).contains(pokemon), "That Pokemon doesn't exist!")
-  val level = args.drop(1).headOption.map(_.toInt).getOrElse(1)
-  val browser = JsoupBrowser()
-  val doc: Document = browser.get(s"http://pokemondb.net/pokedex/$pokemon")
+  override def main(args: Array[String]) {
+    val pokemon = args.head.trim.toLowerCase
+    require(data.PokemonList.indexMap.values.toSeq.map(_.toLowerCase).contains(pokemon), "That Pokemon doesn't exist!")
+    val level = args.drop(1).headOption.map(_.toInt).getOrElse(1)
+    val browser = JsoupBrowser()
+    val doc: Document = browser.get(s"http://pokemondb.net/pokedex/$pokemon")
 
-  val pokemonStats = getPokemonStatsFromDoc(doc)
-  val (pokemonCR, pokemonEvoLevel) = getPokemonCRFromDoc(doc)
-  val pokemonMoves = getPokemonMovesFromDoc(doc)
-  val dndStats = StatTransformers.pokemonToDndStats(
-    p = pokemonStats,
-    cr = pokemonCR,
-    evoLevel = pokemonEvoLevel,
-    moves = pokemonMoves,
-    level = level)
+    val pokemonStats = getPokemonStatsFromDoc(doc)
+    val (pokemonCR, pokemonEvoLevel) = getPokemonCRFromDoc(doc, pokemon)
+    val pokemonMoves = getPokemonMovesFromDoc(doc)
+    val dndStats = StatTransformers.pokemonToDndStats(
+      name = pokemon,
+      p = pokemonStats,
+      cr = pokemonCR,
+      evoLevel = pokemonEvoLevel,
+      moves = pokemonMoves,
+      level = level)
 
-  println()
-  println()
-  println(pokemonStats.prettyPrint)
-  println()
-  println()
-  println(dndStats.prettyPrint)
-  println()
-  println()
+    println()
+    println()
+    println(pokemonStats.prettyPrint)
+    println()
+    println()
+    println(dndStats.prettyPrint)
+    println()
+    println()
+  }
 }

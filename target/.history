@@ -79,3 +79,6 @@ runMain commands.GetPokemonDnDStats aron 1
 runMain commands.GetPokemonDnDStats diggersby 1
 compile
 runMain commands.GetPokemonDnDStats metapod 1
+runMain commands.GenerateWildPokemonEncounter
+runMain commands.GenerateWildPokemonEncounter 15
+runMain commands.GenerateWildPokemonEncounter 15 5
