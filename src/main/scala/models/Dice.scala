@@ -1,7 +1,5 @@
 package models
 
-import models.PokemonMove
-
 object Dice {
   val D20Average = 11
   val D12Average = 7

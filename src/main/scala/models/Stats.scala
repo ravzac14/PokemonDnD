@@ -27,6 +27,7 @@ case class PokemonBaseStats(
 case class DnDStats(
   val level: Int = 1,
   val challengeRating: Int = 0,
+  val evoPointsNeeded: Int = 0,
   val hitDice: HitDice.Value,
   val rolledMaxHp: Int,
   val maxPossibleHp: Int,
@@ -44,6 +45,7 @@ case class DnDStats(
     s"""^^^^^^^^^ Pokemon DnD Stats ^^^^^^^^^
         |Level: $level
         |Challenge Rating (discount this for evolution lines with baby Pokemon or multiple forms): $challengeRating
+        |Evolution Points needed for next evolution: ${evoPointsNeeded match { case 0 => "N/A" case e => e.toString }}
         |Hit Dice (for this evolution): $hitDice
         |Rolled Max Health: $rolledMaxHp
         |Max Possible HP: $maxPossibleHp
@@ -162,9 +164,9 @@ object StatTransformers {
     else {
       val base: Seq[PokemonMove] = for (_ <- 0 to level) yield PokemonMove(1, "tackle")
       base.tail.foldLeft(Seq(base.head)) { case (acc, v) =>
-        var rolledMove = rollForRandomMove(availableMoves)
+        var rolledMove = Random.rollForRandomMove(availableMoves)
         while (rolledMove.isDefault || acc.map(_.name).contains(rolledMove.name)) {
-          rolledMove = rollForRandomMove(availableMoves)
+          rolledMove = Random.rollForRandomMove(availableMoves)
         }
         acc :+ rolledMove
       }
@@ -174,6 +176,7 @@ object StatTransformers {
   def pokemonToDndStats(
     p: PokemonBaseStats,
     cr: Int,
+    evoLevel: Int,
     moves: Seq[PokemonMove],
     level: Int = 1): DnDStats = {
     val hitDice = nearestHitDice(roundUpToNearestTenAndDrop(p.hp))
@@ -182,10 +185,12 @@ object StatTransformers {
     val con  = roundUpToNearestTenAndDrop((p.defense + p.hp) / 2)
     val int = roundUpToNearestTenAndDrop(p.spAttack) + 3
     val wis = roundUpToNearestTenAndDrop(Math.max(p.spAttack, p.spDefense)) + 3
+    val dndEvoLevel = Math.ceil(evoLevel.toDouble / 5d)
 
     DnDStats(
       level = level,
       challengeRating = cr,
+      evoPointsNeeded = dndEvoLevel.toInt,
       hitDice = hitDice,
       rolledMaxHp = maxHp(hitDice, level, con, maxPossible = false),
       maxPossibleHp = maxHp(hitDice, level, con, maxPossible = true),

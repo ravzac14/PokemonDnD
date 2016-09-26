@@ -4,7 +4,6 @@ import models.{PokemonMove, PokemonBaseStats, StatTransformers}
 import net.ruippeixotog.scalascraper.browser.JsoupBrowser
 import net.ruippeixotog.scalascraper.dsl.DSL._
 import net.ruippeixotog.scalascraper.dsl.DSL.Extract._
-import net.ruippeixotog.scalascraper.dsl.DSL.Parse._
 import net.ruippeixotog.scalascraper.model.{Element, Document}
 
 object GetPokemonDnDStats extends App {
@@ -21,18 +20,30 @@ object GetPokemonDnDStats extends App {
   }
 
   // Doesn't work for eevee-lutions or evolution lines with baby Pokemon
-  def getPokemonCRFromDoc(doc: Document) = {
+  def getPokemonCRFromDoc(doc: Document): (Int, Int) = { // (CR, Level for next Evolution)
     val maybeEvolution: Option[Element] = (doc >> elementList(".infocard-evo-list")).headOption
-    val maybeEvos: Option[Seq[Element]] =
-      maybeEvolution.map(e => (e >> elementList(".infocard-tall")).flatMap(_ >> elementList(".sprite")))
-    val evoNumber: Option[Int] = maybeEvos.map { e =>
+    val maybeEvos: Option[Seq[Element]] = maybeEvolution.map(e =>
+      (e >> elementList(".infocard-tall")).flatMap(_ >> elementList(".sprite")))
+    val maybeEvoBlock: Option[String] = maybeEvolution.map(e =>
+      (e >> elementList(".infocard-tall")).mkString(""))
+    val levelRegex = "(\\(Level [0-9]+\\))".r
+    val maybeLevelList: Option[Seq[Int]] = maybeEvoBlock
+      .map(eb => for (m <- levelRegex findAllMatchIn eb) yield m group 1)
+      .map(_.toSeq.map(_.replaceAll("\\(Level ","").replaceAll("\\)","").toInt))
+
+    val maybeEvoNumber: Option[Int] = maybeEvos.map { e =>
       e.map(_.toString.replaceAll(".*alt=\"","").toLowerCase).takeWhile(!_.startsWith(pokemon)).length + 1
     }
-    val evoMultiple: Float = evoNumber match {
+    val evoMultiple: Float = maybeEvoNumber match {
       case Some(1) if maybeEvos.get.length > 1 => .5f
       case Some(2) if maybeEvos.get.length > 2 => 1f
       case _ => 2f
     }
+    val maybeEvoLevel: Option[Int] = for {
+      evoNumber <- maybeEvoNumber
+      levelList <- maybeLevelList
+      if evoNumber <= levelList.length
+    } yield levelList(evoNumber - 1)
 
     val dataStats: Element = (doc >> elementList(".vitals-table")).head
     val dataList: Seq[String] = (dataStats >> elementList("tr")).drop(1) >> text("td")
@@ -53,7 +64,7 @@ object GetPokemonDnDStats extends App {
     val C = B + StatTransformers.getEggGroupBonus(updatedEggGroups).toDouble
     val D = C * typeMultiple
     val E = D * evoMultiple
-    Math.ceil(E + StatTransformers.getWeightBonus(weight)).toInt
+    (Math.ceil(E + StatTransformers.getWeightBonus(weight)).toInt, maybeEvoLevel.getOrElse(0))
   }
 
   def getPokemonMovesFromDoc(doc: Document): Seq[PokemonMove] = {
@@ -72,11 +83,12 @@ object GetPokemonDnDStats extends App {
   val doc: Document = browser.get(s"http://pokemondb.net/pokedex/$pokemon")
 
   val pokemonStats = getPokemonStatsFromDoc(doc)
-  val pokemonCR = getPokemonCRFromDoc(doc)
+  val (pokemonCR, pokemonEvoLevel) = getPokemonCRFromDoc(doc)
   val pokemonMoves = getPokemonMovesFromDoc(doc)
   val dndStats = StatTransformers.pokemonToDndStats(
     p = pokemonStats,
     cr = pokemonCR,
+    evoLevel = pokemonEvoLevel,
     moves = pokemonMoves,
     level = level)
 

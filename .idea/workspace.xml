@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cc4d87f8-0793-4849-89e7-163cd677b854" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/commands/GenerateWildPokemonEncounter.scala" afterPath="$PROJECT_DIR$/src/main/scala/commands/GenerateWildPokemonEncounter.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/commands/GetPokemonDnDStats.scala" afterPath="$PROJECT_DIR$/src/main/scala/commands/GetPokemonDnDStats.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/models/Dice.scala" afterPath="$PROJECT_DIR$/src/main/scala/models/Dice.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/models/Stats.scala" afterPath="$PROJECT_DIR$/src/main/scala/models/Stats.scala" />
@@ -39,7 +39,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/scala/commands/GetPokemonDnDStats.scala">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="68" column="77" selection-start-line="68" selection-start-column="77" selection-end-line="68" selection-end-column="77" />
+              <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
               <folding>
                 <element signature="e#18#81#0" expanded="true" />
               </folding>
@@ -47,11 +47,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Stats.scala" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Stats.scala" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/scala/models/Stats.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="157" column="76" selection-start-line="157" selection-start-column="76" selection-end-line="157" selection-end-column="76" />
+            <state vertical-scroll-proportion="0.81407034">
+              <caret line="47" column="25" selection-start-line="47" selection-start-column="25" selection-end-line="47" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -61,17 +61,17 @@
         <entry file="file://$PROJECT_DIR$/src/main/scala/models/Dice.scala">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="41" column="31" selection-start-line="41" selection-start-column="31" selection-end-line="41" selection-end-column="31" />
+              <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GenerateWildPokemonEncounter.scala" pinned="false" current-in-tab="true">
+      <file leaf-file-name="GenerateWildPokemonEncounter.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/commands/GenerateWildPokemonEncounter.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.09045226">
-              <caret line="3" column="38" selection-start-line="3" selection-start-column="38" selection-end-line="3" selection-end-column="38" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="2" column="38" selection-start-line="2" selection-start-column="38" selection-end-line="2" selection-end-column="38" />
               <folding />
             </state>
           </provider>
@@ -116,12 +116,12 @@
         <option value="/usr/lib/jvm/java-8-oracle/src.zip!/java/lang/Math.java" />
         <option value="$PROJECT_DIR$/src/main/scala/data/PokemonList/scala.scala" />
         <option value="$PROJECT_DIR$/pokemon_map" />
-        <option value="$PROJECT_DIR$/src/main/scala/commands/GetPokemonDnDStats.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/models/Stats.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/data/PokemonList.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/models/Dice.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/data/Biomes.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/commands/GenerateWildPokemonEncounter.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/commands/GetPokemonDnDStats.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/models/Dice.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/models/Stats.scala" />
       </list>
     </option>
   </component>
@@ -824,32 +824,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/commands/GetPokemonDnDStats.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="68" column="77" selection-start-line="68" selection-start-column="77" selection-end-line="68" selection-end-column="77" />
-          <folding>
-            <element signature="e#18#81#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/models/Stats.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="157" column="76" selection-start-line="157" selection-start-column="76" selection-end-line="157" selection-end-column="76" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/models/Dice.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="41" column="31" selection-start-line="41" selection-start-column="31" selection-end-line="41" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/data/PokemonList.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -868,8 +842,34 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/commands/GenerateWildPokemonEncounter.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.09045226">
-          <caret line="3" column="38" selection-start-line="3" selection-start-column="38" selection-end-line="3" selection-end-column="38" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="2" column="38" selection-start-line="2" selection-start-column="38" selection-end-line="2" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/models/Dice.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/commands/GetPokemonDnDStats.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+          <folding>
+            <element signature="e#18#81#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/models/Stats.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.81407034">
+          <caret line="47" column="25" selection-start-line="47" selection-start-column="25" selection-end-line="47" selection-end-column="25" />
           <folding />
         </state>
       </provider>

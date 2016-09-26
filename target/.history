@@ -56,3 +56,26 @@ runMain commands.GetPokemonDnDStats Wobbuffet
 runMain commands.GetPokemonDnDStats Nidoking
 runMain commands.GetPokemonDnDStats Nidoran
 runMain commands.GetPokemonDnDStats Nidoran-f
+runMain commands.GetPokemonDnDStats NidoMagnezone
+runMain commands.GetPokemonDnDStats Magnezone 6
+runMain commands.GetPokemonDnDStats Seviper 4
+runMain commands.GetPokemonDnDStats Slugma 2
+runMain commands.GetPokemonDnDStats Starmie 3
+runMain commands.GetPokemonDnDStats purugly 3
+runMain commands.GetPokemonDnDStats Purugly 3
+runMain commands.GetPokemonDnDStats glameow 3
+runMain commands.GetPokemonDnDStats parasect 3
+runMain commands.GetPokemonDnDStats tyrunt 3
+runMain commands.GetPokemonDnDStats chatot 4
+runMain commands.GetPokemonDnDStats haunter 3
+runMain commands.GetPokemonDnDStats druddigon 4
+runMain commands.GetPokemonDnDStats slowpoke 1
+runMain commands.GetPokemonDnDStats riolu 1
+runMain commands.GetPokemonDnDStats aron 1
+runMain commands.GetPokemonDnDStats eevee 1
+runMain commands.GetPokemonDnDStats tepig 1
+runMain commands.GetPokemonDnDStats eevee 1
+runMain commands.GetPokemonDnDStats aron 1
+runMain commands.GetPokemonDnDStats diggersby 1
+compile
+runMain commands.GetPokemonDnDStats metapod 1
