@@ -1,5 +1,7 @@
 package models
 
+import data.Biomes
+
 object Dice {
   val D20Average = 11
   val D12Average = 7
@@ -17,7 +19,7 @@ object Dice {
   def D6Roll = r.nextInt(5) + 1
   def D4Roll = r.nextInt(3) + 1
 
-  def D20RollOrAverage = Math.max(D20Roll,D20Average)
+  def D20RollOrAverage = Math.max(D20Roll, D20Average)
   def D12RollOrAverage = Math.max(D12Roll, D12Average)
   def D10RollOrAverage = Math.max(D10Roll, D10Average)
   def D8RollOrAverage = Math.max(D8Roll, D8Average)
@@ -34,9 +36,18 @@ object Random {
   def rollForRandomPokemon: String = {
     val r = scala.util.Random
     val randomNumber = r.nextInt(data.PokemonList.totalPokemon - 1) + 1
-    data.PokemonList.indexMap
-      .find { case (k, v) => k.dropWhile(_ == '0').toInt == randomNumber }
-      .map(_._2)
+    data.PokemonList.indexMapWithTypes
+      .find { case (k, (n, ts)) => k.dropWhile(_ == '0').toInt == randomNumber }
+      .map(_._2._1)
       .getOrElse("Togepi") //lol
+  }
+
+  def rollForRandomPokemonFromBiome(biome: Biomes.Value): String = {
+    val r = scala.util.Random
+    val pokemonFromBiome = data.Biomes.pokemonByBiome.get(biome)
+    require(pokemonFromBiome.isDefined, s"Given biome, $biome was not found in biome list: \n${Biomes.values}")
+
+    val randomNumber = r.nextInt(pokemonFromBiome.get.length - 1)
+    pokemonFromBiome.get(randomNumber)
   }
 }

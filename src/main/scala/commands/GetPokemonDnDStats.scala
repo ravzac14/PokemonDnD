@@ -1,5 +1,6 @@
 package commands
 
+import data.PokemonList
 import models.{PokemonMove, PokemonBaseStats, StatTransformers}
 import net.ruippeixotog.scalascraper.browser.JsoupBrowser
 import net.ruippeixotog.scalascraper.dsl.DSL._
@@ -47,7 +48,7 @@ object GetPokemonDnDStats extends App {
 
     val dataStats: Element = (doc >> elementList(".vitals-table")).head
     val dataList: Seq[String] = (dataStats >> elementList("tr")).drop(1) >> text("td")
-    val types: Seq[String] = dataList.head.split(" ")
+    val types: Seq[String] = PokemonList.typesForPokemon.get(pokemon.capitalize).get
     val typeMultiple: Int = types.length
     val height: Float = dataList.drop(2).head.replaceAll(" ", "").replaceAll(".*\\(","").replaceAll("m\\)","").toFloat
     val weight: Float = dataList.drop(3).head.replaceAll(" ", "").replaceAll(".*\\(","").replaceAll("kg\\)","").toFloat
@@ -78,7 +79,7 @@ object GetPokemonDnDStats extends App {
 
   override def main(args: Array[String]) {
     val pokemon = args.head.trim.toLowerCase
-    require(data.PokemonList.indexMap.values.toSeq.map(_.toLowerCase).contains(pokemon), "That Pokemon doesn't exist!")
+    require(data.PokemonList.pokemonKeyList.contains(pokemon), "That Pokemon doesn't exist!")
     val level = args.drop(1).headOption.map(_.toInt).getOrElse(1)
     val browser = JsoupBrowser()
     val doc: Document = browser.get(s"http://pokemondb.net/pokedex/$pokemon")
