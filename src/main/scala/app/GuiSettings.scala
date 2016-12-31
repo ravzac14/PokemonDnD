@@ -56,7 +56,7 @@ object GuiSettings {
     case PokemonStatsScreenTitle => new MenuBar {
       contents += new Menu("Actions") {
         contents += new MenuItem(Action("Main Screen") {
-          Main.startup(Array.empty[String])
+          MainGui.startup(Array.empty[String])
           frame.dispose()
         })
         contents += new MenuItem(Action("Generate Encounter") {
@@ -71,7 +71,7 @@ object GuiSettings {
     case EncounterScreenTitle => new MenuBar {
       contents += new Menu("Actions") {
         contents += new MenuItem(Action("Main Screen") {
-          Main.startup(Array.empty[String])
+          MainGui.startup(Array.empty[String])
           frame.dispose()
         })
         contents += new MenuItem(Action("Get Pokemon D&D Stats") {
