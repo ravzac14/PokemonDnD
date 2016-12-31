@@ -1,7 +1,7 @@
 package data
 
 object Biomes extends Enumeration {
-  val Plains, Forest, Hills, Mountains, Marsh, Desert, Underground, Aquatic, Abyss, Urban = Value
+  val ANY, Plains, Forest, Hills, Mountains, Marsh, Desert, Underground, Aquatic, Abyss, Urban = Value
 
   def fromString(s: String): Biomes.Value = s.trim.toLowerCase match {
     case "plains" | "plain" => Plains
@@ -14,6 +14,7 @@ object Biomes extends Enumeration {
     case "aquatic" | "underwater" | "water" | "surfing" | "surf" => Aquatic
     case "abyss" => Abyss
     case "urban" | "city" | "town" => Urban // Split these up as you need
+    case "none" => ANY
     case _ => throw new IllegalArgumentException(s"Unknown biome given, $s... The Biomes are: \n${Biomes.values}")
   }
 
@@ -27,7 +28,8 @@ object Biomes extends Enumeration {
     Underground -> Seq("Poison", "Ground", "Rock", "Ghost", "Steel", "Fire", "Water", "Psychic", "Ice", "Dragon", "Dark", "Fairy"),
     Aquatic -> Seq("Water", "Ice"),
     Abyss -> Seq("Poison", "Ghost", "Steel", "Psychic", "Ice", "Dragon", "Dark", "Fairy"),
-    Urban -> Seq("Normal", "Fighting", "Flying", "Poison", "Ghost", "Steel", "Electric", "Psychic", "Dark", "Fairy"))
+    Urban -> Seq("Normal", "Fighting", "Flying", "Poison", "Ghost", "Steel", "Electric", "Psychic", "Dark", "Fairy"),
+    ANY -> Seq("Normal", "Bug", "Grass", "Electric", "Poison", "Ground", "Rock", "Ghost", "Steel", "Fire", "Water", "Psychic", "Ice", "Dragon", "Dark", "Fairy", "Flying", "Fighting"))
 
   lazy val pokemonByBiome: Map[Biomes.Value, Seq[String]] = typesForBiome.map {
     case (biome, types) => biome -> types.flatMap(PokemonList.pokemonByType.get).flatten

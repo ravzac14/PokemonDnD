@@ -1,11 +1,17 @@
 package commands
 
+import java.io.{PrintWriter, File}
+
 import data.PokemonList
 import models.{PokemonMove, PokemonBaseStats, StatTransformers}
 import net.ruippeixotog.scalascraper.browser.JsoupBrowser
 import net.ruippeixotog.scalascraper.dsl.DSL._
 import net.ruippeixotog.scalascraper.dsl.DSL.Extract._
 import net.ruippeixotog.scalascraper.model.{Element, Document}
+import org.joda.time.{DateTime, DateTimeZone}
+import org.joda.time.format.DateTimeFormat
+
+import scala.util.{Failure, Success, Try}
 
 object GetPokemonDnDStats extends App {
   def getPokemonStatsFromDoc(doc: Document): PokemonBaseStats = {
@@ -77,31 +83,62 @@ object GetPokemonDnDStats extends App {
     }
   }
 
+  def statsAsString(pokemon: String, level: Int): String = {
+    val tryStatsString =
+      for {
+        doc <- Try {
+          val browser = JsoupBrowser()
+          browser.get(s"http://pokemondb.net/pokedex/$pokemon")
+        }
+        pokemonStats <- Try(getPokemonStatsFromDoc(doc))
+        (pokemonCR, pokemonEvoLevel) <- Try(getPokemonCRFromDoc(doc, pokemon))
+        pokemonMoves <- Try(getPokemonMovesFromDoc(doc))
+        dndStats <- Try(StatTransformers.pokemonToDndStats(
+          name = pokemon,
+          p = pokemonStats,
+          cr = pokemonCR,
+          evoLevel = pokemonEvoLevel,
+          moves = pokemonMoves,
+          level = level))
+      } yield
+        s"""|${pokemonStats.prettyPrint}
+            |
+            |${dndStats.prettyPrint}
+            |
+            |""".stripMargin
+
+    val result = tryStatsString match {
+      case Success(s) => s
+      case Failure(e) => e.getMessage
+    }
+
+    s"""%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+       |%%%%                  ${pokemon.toUpperCase}
+       |%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+       |
+       |$result
+       |
+     """.stripMargin
+  }
+
+  def statsAsFile(pokemon: String, level: Int, path: Option[String] = None): File = {
+    val statString = statsAsString(pokemon, level)
+    val now = new DateTime(DateTimeZone.forID("America/Los_Angeles"))
+    val nowAsString = DateTimeFormat.forPattern("YYYY-MM-dd").print(now)
+    val file = new File(path.getOrElse(s"${pokemon}_${level}_$nowAsString.txt"))
+    new PrintWriter(file) {
+      write(statString)
+      close()
+    }
+    file
+  }
+
   override def main(args: Array[String]) {
     val pokemon = args.head.trim.toLowerCase
     require(data.PokemonList.pokemonKeyList.contains(pokemon), "That Pokemon doesn't exist!")
     val level = args.drop(1).headOption.map(_.toInt).getOrElse(1)
-    val browser = JsoupBrowser()
-    val doc: Document = browser.get(s"http://pokemondb.net/pokedex/$pokemon")
+    val statsString = statsAsString(pokemon, level)
 
-    val pokemonStats = getPokemonStatsFromDoc(doc)
-    val (pokemonCR, pokemonEvoLevel) = getPokemonCRFromDoc(doc, pokemon)
-    val pokemonMoves = getPokemonMovesFromDoc(doc)
-    val dndStats = StatTransformers.pokemonToDndStats(
-      name = pokemon,
-      p = pokemonStats,
-      cr = pokemonCR,
-      evoLevel = pokemonEvoLevel,
-      moves = pokemonMoves,
-      level = level)
-
-    println()
-    println()
-    println(pokemonStats.prettyPrint)
-    println()
-    println()
-    println(dndStats.prettyPrint)
-    println()
-    println()
+    println(statsString)
   }
 }
