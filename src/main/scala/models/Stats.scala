@@ -1,10 +1,32 @@
 package models
 
-object HitDice extends Enumeration { val d6, d8, d10, d12, d20 = Value }
+import data.{PokemonList, Types, MoveList}
 
-case class PokemonMove(level: Int, name: String) {
-  def prettyPrint = s"level: $level -- ${name.capitalize}"
-  def isDefault = name == "tackle" || name == "scratch" || name == "pound"
+object HitDice extends Enumeration { val d6, d8, d10, d12 = Value }
+
+object DnDAbility extends Enumeration {
+  val Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma = Value
+
+  def fromPsvRowItem(s: String): Seq[DnDAbility.Value] =
+    s.trim.toLowerCase.replaceAll(" ", "").split(",").map(fromString)
+
+  def fromString(s: String): DnDAbility.Value = s.trim.toLowerCase.take(3) match {
+    case "str" => Strength
+    case "dex" => Dexterity
+    case "con" => Constitution
+    case "int" => Intelligence
+    case "wis" => Wisdom
+    case "cha" => Charisma
+    case e => throw new Exception(s"Unknown DnDAbility [$e]!")
+  }
+}
+
+case class PokemonMove(
+  level: Int,
+  name: String) {
+  def nameKey = StatTransformers.stringKey(name)
+  def simplePrint = s"level: $level -- ${nameKey.capitalize}"
+  def isDefault = nameKey == "tackle" || nameKey == "scratch" || nameKey == "pound"
 }
 
 case class PokemonBaseStats(
@@ -13,7 +35,8 @@ case class PokemonBaseStats(
   val defense: Int,
   val spAttack: Int,
   val spDefense: Int,
-  val speed: Int) {
+  val speed: Int,
+  val moves: Seq[PokemonMove] = Seq.empty[PokemonMove]) {
   def prettyPrint =
     s"""^^^^^^^^ Pokemon Base Stats ^^^^^^^^^^
        |HP: $hp
@@ -21,14 +44,15 @@ case class PokemonBaseStats(
        |Defense: $defense
        |Special Attack: $spAttack
        |Special Defense: $spDefense
-       |Speed: $speed""".stripMargin
+       |Speed: $speed
+       |Moves: ${moves.map("\n    " + _.simplePrint).mkString("")}""".stripMargin
 }
 
 case class DnDStats(
   val name: String,
   val level: Int = 1,
   val challengeRating: Int = 0,
-  val evoPointsNeeded: Int = 0,
+  val nextEvolutionLevel: Option[Int] = None,
   val hitDice: HitDice.Value,
   val rolledMaxHp: Int,
   val maxPossibleHp: Int,
@@ -40,14 +64,14 @@ case class DnDStats(
   val wisdom: Int,
   val charisma: Int,
   val movementSpeed: Int,
-  val availableMoves: Seq[PokemonMove],
-  val rolledMoves: Seq[PokemonMove]) {
+  val availableMoves: Seq[DnDMove],
+  val rolledMoves: Seq[DnDMove]) {
   def prettyPrint =
     s"""^^^^^^^^^ Pokemon DnD Stats ^^^^^^^^^
         |Name: ${name.capitalize}
         |Level: $level
         |Challenge Rating (discount this for evolution lines with baby Pokemon or multiple forms): $challengeRating
-        |Evolution Points needed for next evolution: ${evoPointsNeeded match { case 0 => "N/A" case e => e.toString }}
+        |Level of next evolution: ${nextEvolutionLevel match { case None => "N/A" case Some(e) => e.toString }}
         |Hit Dice (for this evolution): $hitDice
         |Rolled Max Health: $rolledMaxHp
         |Max Possible HP: $maxPossibleHp
@@ -59,12 +83,22 @@ case class DnDStats(
         |Intelligence: $intelligence
         |Wisdom: $wisdom
         |Charisma: $charisma
-        |All Pokemon Moves: ${availableMoves.map("\n    " + _.prettyPrint).mkString("")}
-        |Rolled Moves (for this evolution and level): ${rolledMoves.map("\n    " + _.prettyPrint).mkString("")}""".stripMargin
+        |All Pokemon Moves: ${availableMoves.map("\n    " + _.simplePrint).mkString("")}
+        |Rolled Moves (for this evolution and level): ${rolledMoves.map("\n    " + _.simplePrint).mkString("")}""".stripMargin
 }
 
 object StatTransformers {
-  def roundUpToNearestTenAndDrop(i: Int): Int = Math.round((i + 5) / 10)
+  def stringKey(s: String) = s.trim.toLowerCase
+
+  private def roundUpToNearestTenAndDrop(j: Int): Int = Math.round((j + 5) / 10)
+
+  private def trendTowardsMean(k: Int): Int = k match {
+    case _ if k <= 6 => 6
+    case _ if k >= 20 => 20
+    case _ => k
+  }
+
+  def convertInitialStat(i: Int) = trendTowardsMean(roundUpToNearestTenAndDrop(i))
 
   def getWeightBonus(w: Float): Int = w match {
     case i if i <= 5f => -2
@@ -104,9 +138,8 @@ object StatTransformers {
   }
 
   def nearestHitDice(roundedHp: Int): HitDice.Value = roundedHp match {
-    case i if i >= 18 => HitDice.d20
-    case i if i >= 11 => HitDice.d12
-    case i if i >= 8 => HitDice.d10
+    case i if i >= 12 => HitDice.d12
+    case i if i >= 9 => HitDice.d10
     case i if i >= 6 => HitDice.d8
     case _ => HitDice.d6
   }
@@ -136,7 +169,6 @@ object StatTransformers {
   def maxHp(hitDice: HitDice.Value, level: Int, constitution: Int, maxPossible: Boolean) = {
     val conMod = statToModifier(constitution)
     val base = hitDice match {
-      case HitDice.d20 => 20
       case HitDice.d12 => 12
       case HitDice.d10 => 10
       case HitDice.d8 => 8
@@ -147,7 +179,6 @@ object StatTransformers {
         val roll =
           if (maxPossible) base
           else hitDice match {
-            case HitDice.d20 => Dice.D20RollOrAverage
             case HitDice.d12 => Dice.D12RollOrAverage
             case HitDice.d10 => Dice.D10RollOrAverage
             case HitDice.d8 => Dice.D8RollOrAverage
@@ -159,12 +190,12 @@ object StatTransformers {
     } else base + conMod
   }
 
-  def rollForMoves(moves: Seq[PokemonMove], level: Int): Seq[PokemonMove] = {
+  def rollForMoves(moves: Seq[DnDMove], level: Int): Seq[DnDMove] = {
     val levelCap = level * 5
-    val availableMoves = moves.filter(_.level <= levelCap)
+    val availableMoves = moves.filter(_.level.exists(_ <= levelCap))
     if (availableMoves.length <= level + 1) availableMoves
     else {
-      val base: Seq[PokemonMove] = for (_ <- 0 to level) yield PokemonMove(1, "tackle")
+      val base: Seq[DnDMove] = for (_ <- 0 to level) yield MoveList.default
       base.tail.foldLeft(Seq(base.head)) { case (acc, v) =>
         var rolledMove = Random.rollForRandomMove(availableMoves)
         while (rolledMove.isDefault || acc.map(_.name).contains(rolledMove.name)) {
@@ -175,39 +206,56 @@ object StatTransformers {
     }
   }
 
+  private def chaBase(statsMean: Int, types: Seq[Types.Value]): Int =
+    statsMean + types.map(Types.chaModFor).sum
+
+  def pokemonToDndMoves(moves: Seq[PokemonMove]): Seq[DnDMove] =
+    moves.map {
+      m =>
+        MoveList.allMoves
+          .find(_.nameKey == m.nameKey)
+          .getOrElse(throw new Exception(s"Couldn't find a move ${m.nameKey}"))
+          .copy(level = Some(Math.ceil(m.level / 5d).toInt))
+    }
+
+
   def pokemonToDndStats(
     name: String,
     p: PokemonBaseStats,
     cr: Int,
-    evoLevel: Int,
-    moves: Seq[PokemonMove],
+    maybeEvoLevel: Option[Int],
     level: Int = 1): DnDStats = {
-    val hitDice = nearestHitDice(roundUpToNearestTenAndDrop(p.hp))
-    val str = roundUpToNearestTenAndDrop(p.attack) + 3
-    val dex = roundUpToNearestTenAndDrop(p.speed) + 3
-    val con  = roundUpToNearestTenAndDrop((p.defense + p.hp) / 2)
-    val int = roundUpToNearestTenAndDrop(p.spAttack) + 3
-    val wis = roundUpToNearestTenAndDrop(Math.max(p.spAttack, p.spDefense)) + 3
-    val dndEvoLevel = Math.ceil(evoLevel.toDouble / 5d)
+    val hitDice = nearestHitDice(convertInitialStat(p.hp))
+    val str = convertInitialStat(p.attack) + 3
+    val dex = convertInitialStat(p.speed) + 3
+    // Con being too low means too short of battles
+    val con  = Math.max(convertInitialStat((p.defense + p.hp) / 2), 8)
+    val int = convertInitialStat(p.spAttack) + 3
+    val wis = convertInitialStat(Math.max(p.spAttack, p.spDefense)) + 3
+    val statMeanOrTen = Math.max((str + dex + con + int + wis) / 5, 10)
+    val cha = trendTowardsMean(chaBase(statMeanOrTen, PokemonList.typesForPokemon.getOrElse(name, Seq.empty[Types.Value])))
+    val maybeDndEvoLevel = maybeEvoLevel.map(l => Math.ceil(l.toDouble / 5d))
+    val dndMoves = pokemonToDndMoves(p.moves)
 
     DnDStats(
       name = name,
       level = level,
       challengeRating = cr,
-      evoPointsNeeded = dndEvoLevel.toInt,
+      nextEvolutionLevel = maybeDndEvoLevel.map(_.toInt),
       hitDice = hitDice,
       rolledMaxHp = maxHp(hitDice, level, con, maxPossible = false),
       maxPossibleHp = maxHp(hitDice, level, con, maxPossible = true),
-      armorClass = Math.max(10, Math.max(dex, Math.max(con, roundUpToNearestTenAndDrop(p.defense) + 3))),
+      // Defense should be weighted heavier when considering AC
+      armorClass = Math.max(10, Math.max(dex, Math.max(con, convertInitialStat(p.defense) + 3))),
       strength = str,
       dexterity = dex,
       constitution = con,
       intelligence = int,
       wisdom = wis,
-      charisma = (str + dex + con + int + wis) / 5,
+      charisma = cha,
       movementSpeed = movementSpeed(dex),
-      availableMoves = moves,
-      rolledMoves = rollForMoves(moves, level)
+      availableMoves = dndMoves,
+      rolledMoves = rollForMoves(dndMoves, level)
     )
   }
 }

@@ -1,15 +1,11 @@
 package commands
 
-import java.io.{PrintWriter, File}
-
-import data.PokemonList
+import data.{Types, PokemonList}
 import models.{PokemonMove, PokemonBaseStats, StatTransformers}
 import net.ruippeixotog.scalascraper.browser.JsoupBrowser
 import net.ruippeixotog.scalascraper.dsl.DSL._
 import net.ruippeixotog.scalascraper.dsl.DSL.Extract._
 import net.ruippeixotog.scalascraper.model.{Element, Document}
-import org.joda.time.{DateTime, DateTimeZone}
-import org.joda.time.format.DateTimeFormat
 
 import scala.util.{Failure, Success, Try}
 
@@ -27,7 +23,7 @@ object GetPokemonDnDStats extends App {
   }
 
   // Doesn't work for eevee-lutions or evolution lines with baby Pokemon
-  def getPokemonCRFromDoc(doc: Document, pokemon: String): (Int, Int) = { // (CR, Level for next Evolution)
+  def getPokemonCRFromDoc(doc: Document, pokemon: String): (Int, Option[Int]) = { // (CR, Level for next Evolution)
     val maybeEvolution: Option[Element] = (doc >> elementList(".infocard-evo-list")).headOption
     val maybeEvos: Option[Seq[Element]] = maybeEvolution.map(e =>
       (e >> elementList(".infocard-tall")).flatMap(_ >> elementList(".sprite")))
@@ -54,7 +50,7 @@ object GetPokemonDnDStats extends App {
 
     val dataStats: Element = (doc >> elementList(".vitals-table")).head
     val dataList: Seq[String] = (dataStats >> elementList("tr")).drop(1) >> text("td")
-    val types: Seq[String] = PokemonList.typesForPokemon.get(pokemon.capitalize).get
+    val types: Seq[Types.Value] = PokemonList.typesForPokemon.get(pokemon.capitalize).get
     val typeMultiple: Int = types.length
     val height: Float = dataList.drop(2).head.replaceAll(" ", "").replaceAll(".*\\(","").replaceAll("m\\)","").toFloat
     val weight: Float = dataList.drop(3).head.replaceAll(" ", "").replaceAll(".*\\(","").replaceAll("kg\\)","").toFloat
@@ -71,7 +67,7 @@ object GetPokemonDnDStats extends App {
     val C = B + StatTransformers.getEggGroupBonus(updatedEggGroups).toDouble
     val D = C * typeMultiple
     val E = D * evoMultiple
-    (Math.ceil(E + StatTransformers.getWeightBonus(weight)).toInt, maybeEvoLevel.getOrElse(0))
+    (Math.ceil(E + StatTransformers.getWeightBonus(weight)).toInt, maybeEvoLevel)
   }
 
   def getPokemonMovesFromDoc(doc: Document): Seq[PokemonMove] = {
@@ -93,15 +89,15 @@ object GetPokemonDnDStats extends App {
         pokemonStats <- Try(getPokemonStatsFromDoc(doc))
         (pokemonCR, pokemonEvoLevel) <- Try(getPokemonCRFromDoc(doc, pokemon))
         pokemonMoves <- Try(getPokemonMovesFromDoc(doc))
+        statsWithMoves = pokemonStats.copy(moves = pokemonMoves)
         dndStats <- Try(StatTransformers.pokemonToDndStats(
           name = pokemon,
-          p = pokemonStats,
+          p = statsWithMoves,
           cr = pokemonCR,
-          evoLevel = pokemonEvoLevel,
-          moves = pokemonMoves,
+          maybeEvoLevel = pokemonEvoLevel,
           level = level))
       } yield
-        s"""|${pokemonStats.prettyPrint}
+        s"""|${statsWithMoves.prettyPrint}
             |
             |${dndStats.prettyPrint}
             |
@@ -119,18 +115,6 @@ object GetPokemonDnDStats extends App {
        |$result
        |
      """.stripMargin
-  }
-
-  def statsAsFile(pokemon: String, level: Int, path: Option[String] = None): File = {
-    val statString = statsAsString(pokemon, level)
-    val now = new DateTime(DateTimeZone.forID("America/Los_Angeles"))
-    val nowAsString = DateTimeFormat.forPattern("YYYY-MM-dd").print(now)
-    val file = new File(path.getOrElse(s"${pokemon}_${level}_$nowAsString.txt"))
-    new PrintWriter(file) {
-      write(statString)
-      close()
-    }
-    file
   }
 
   override def main(args: Array[String]) {

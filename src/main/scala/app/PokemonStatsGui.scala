@@ -1,11 +1,28 @@
 package app
 
+import java.io.{PrintWriter, File}
+
+import commands.GetPokemonDnDStats
 import data.PokemonList
+import org.joda.time.format.DateTimeFormat
+import org.joda.time.{DateTime, DateTimeZone}
 
 import scala.swing._
 import scala.swing.event.ButtonClicked
 
 object PokemonStatsGui extends SimpleSwingApplication {
+  def statsAsFile(pokemon: String, level: Int, path: Option[String] = None): File = {
+    val statString = GetPokemonDnDStats.statsAsString(pokemon, level)
+    val now = new DateTime(DateTimeZone.forID("America/Los_Angeles"))
+    val nowAsString = DateTimeFormat.forPattern("YYYY-MM-dd").print(now)
+    val file = new File(path.getOrElse(s"${pokemon}_${level}_$nowAsString.txt"))
+    new PrintWriter(file) {
+      write(statString)
+      close()
+    }
+    file
+  }
+
   def top = new MainFrame {
     title = GuiSettings.PokemonStatsScreenTitle
     preferredSize = GuiSettings.WindowSize
@@ -35,7 +52,7 @@ object PokemonStatsGui extends SimpleSwingApplication {
 
     reactions += {
       case ButtonClicked(component) if component == button =>
-        val file = commands.GetPokemonDnDStats.statsAsFile(
+        val file = statsAsFile(
           pokemon = nameDropDown.selection.item,
           level = levelDropDown.selection.item)
         output.text_=(file.getAbsolutePath)

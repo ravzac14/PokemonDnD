@@ -28,7 +28,7 @@ object Dice {
 }
 
 object Random {
-  def rollForRandomMove(availableMoves: Seq[PokemonMove]): PokemonMove = {
+  def rollForRandomMove(availableMoves: Seq[DnDMove]): DnDMove = {
     val r = scala.util.Random
     availableMoves(r.nextInt(availableMoves.length - 1))
   }
