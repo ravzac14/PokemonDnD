@@ -66,6 +66,22 @@ case class DnDStats(
   val movementSpeed: Int,
   val availableMoves: Seq[DnDMove],
   val rolledMoves: Seq[DnDMove]) {
+  def print =
+    s"""Name: ${name.capitalize}
+        |Level: $level
+        |Challenge Rating (discount this for evolution lines with baby Pokemon or multiple forms): $challengeRating
+        |Level of next evolution: ${nextEvolutionLevel match { case None => "N/A" case Some(e) => e.toString }}
+        |Hit Dice (for this evolution): $hitDice
+        |Max Health: $rolledMaxHp
+        |AC: $armorClass
+        |Movement Speed: $movementSpeed
+        |Strength: $strength
+        |Dexterity: $dexterity
+        |Constitution: $constitution
+        |Intelligence: $intelligence
+        |Wisdom: $wisdom
+        |Charisma: $charisma
+        |Rolled Moves (for this evolution and level): ${rolledMoves.map("\n    " + _.simplePrint).mkString("")}""".stripMargin
   def prettyPrint =
     s"""^^^^^^^^^ Pokemon DnD Stats ^^^^^^^^^
         |Name: ${name.capitalize}
@@ -90,7 +106,7 @@ case class DnDStats(
 object StatTransformers {
   def stringKey(s: String) = s.trim.toLowerCase
 
-  private def roundUpToNearestTenAndDrop(j: Int): Int = Math.round((j + 5) / 10)
+  private def roundUpToNearestTenAndDropAddThree(j: Int): Int = Math.round((j + 5) / 10) + 3
 
   private def trendTowardsMean(k: Int): Int = k match {
     case _ if k <= 6 => 6
@@ -98,7 +114,7 @@ object StatTransformers {
     case _ => k
   }
 
-  def convertInitialStat(i: Int) = trendTowardsMean(roundUpToNearestTenAndDrop(i))
+  def convertInitialStat(i: Int) = trendTowardsMean(roundUpToNearestTenAndDropAddThree(i))
 
   def getWeightBonus(w: Float): Int = w match {
     case i if i <= 5f => -2
@@ -192,9 +208,9 @@ object StatTransformers {
 
   def rollForMoves(moves: Seq[DnDMove], level: Int): Seq[DnDMove] = {
     val levelCap = level * 5
-    val availableMoves = moves.filter(_.level.exists(_ <= levelCap))
-    if (availableMoves.length <= level + 1) availableMoves
+    if (moves.length <= level + 1) (MoveList.default +: moves).distinct
     else {
+      val availableMoves = moves.filterNot(_.isDefault)
       val base: Seq[DnDMove] = for (_ <- 0 to level) yield MoveList.default
       base.tail.foldLeft(Seq(base.head)) { case (acc, v) =>
         var rolledMove = Random.rollForRandomMove(availableMoves)
@@ -209,54 +225,89 @@ object StatTransformers {
   private def chaBase(statsMean: Int, types: Seq[Types.Value]): Int =
     statsMean + types.map(Types.chaModFor).sum
 
-  def pokemonToDndMoves(moves: Seq[PokemonMove]): Seq[DnDMove] =
-    moves.map {
-      m =>
-        MoveList.allMoves
-          .find(_.nameKey == m.nameKey)
-          .getOrElse(throw new Exception(s"Couldn't find a move ${m.nameKey}"))
-          .copy(level = Some(Math.ceil(m.level / 5d).toInt))
+  def pokemonToDndMoves(moves: Seq[PokemonMove]): Seq[DnDMove] = {
+    val asDnDMoves =
+      moves.map {
+        m =>
+          MoveList.allMoves
+            .find(_.nameKey == m.nameKey)
+            .getOrElse(throw new Exception(s"Couldn't find a move ${m.nameKey}"))
+            .copy(level = Some(Math.ceil(m.level / 5d).toInt))
+      }
+    val maybeFirstDefault = asDnDMoves.find(_.isDefault)
+    maybeFirstDefault.toSeq ++ asDnDMoves.filterNot(_.isDefault)
+  }
+
+  def autoLevelUp(baseStats: DnDStats, level: Int): DnDStats = {
+    def increment(stats: DnDStats, choice: Int) = choice match {
+      case 1 => stats.copy(strength = stats.strength + 1)
+      case 2 =>
+        if (stats.dexterity + 1 >= stats.armorClass)
+          stats.copy(dexterity = stats.dexterity + 1, armorClass = stats.dexterity + 1)
+        else
+          stats.copy(dexterity = stats.dexterity + 1)
+      case 3 => stats.copy(constitution = stats.constitution + 1, rolledMaxHp = stats.rolledMaxHp + 1)
+      case 4 => stats.copy(intelligence = stats.intelligence + 1)
+      case 5 => stats.copy(wisdom = stats.wisdom + 1)
+      case 6 => stats.copy(charisma = stats.charisma + 1)
+      case 7 => stats.copy(movementSpeed = stats.movementSpeed + 5)
+      case 8 if !stats.rolledMoves.forall(_.isDefault) =>
+        val (defaults, other) = stats.rolledMoves.partition(_.isDefault)
+        stats.copy(
+          armorClass = stats.armorClass + 1,
+          rolledMoves = defaults ++ other.init)
+      case 8 => stats.copy(movementSpeed = stats.armorClass + 1)
     }
 
+    if (level > 1)
+      (1 to level).toSeq.foldLeft(baseStats) {
+        case (stats, _) => increment(stats, scala.util.Random.nextInt(8) + 1)
+      }
+    else baseStats
+  }
 
   def pokemonToDndStats(
     name: String,
     p: PokemonBaseStats,
     cr: Int,
     maybeEvoLevel: Option[Int],
-    level: Int = 1): DnDStats = {
-    val hitDice = nearestHitDice(convertInitialStat(p.hp))
-    val str = convertInitialStat(p.attack) + 3
-    val dex = convertInitialStat(p.speed) + 3
+    level: Int = 1,
+    autoUpLevel: Boolean = false): DnDStats = {
+    val hitDice = nearestHitDice(roundUpToNearestTenAndDropAddThree(p.hp) - 3)
+    val str = convertInitialStat(p.attack)
+    val dex = convertInitialStat(p.speed)
     // Con being too low means too short of battles
     val con  = Math.max(convertInitialStat((p.defense + p.hp) / 2), 8)
-    val int = convertInitialStat(p.spAttack) + 3
-    val wis = convertInitialStat(Math.max(p.spAttack, p.spDefense)) + 3
-    val statMeanOrTen = Math.max((str + dex + con + int + wis) / 5, 10)
-    val cha = trendTowardsMean(chaBase(statMeanOrTen, PokemonList.typesForPokemon.getOrElse(name, Seq.empty[Types.Value])))
+    val int = convertInitialStat(p.spAttack)
+    val wis = convertInitialStat(Math.max(p.spAttack, p.spDefense))
+    val statMeanOrMin = Math.max((str + dex + con + int + wis) / 5, 6)
+    val cha = trendTowardsMean(chaBase(statMeanOrMin, PokemonList.typesForPokemon.getOrElse(name, Seq.empty[Types.Value])))
     val maybeDndEvoLevel = maybeEvoLevel.map(l => Math.ceil(l.toDouble / 5d))
     val dndMoves = pokemonToDndMoves(p.moves)
 
-    DnDStats(
-      name = name,
-      level = level,
-      challengeRating = cr,
-      nextEvolutionLevel = maybeDndEvoLevel.map(_.toInt),
-      hitDice = hitDice,
-      rolledMaxHp = maxHp(hitDice, level, con, maxPossible = false),
-      maxPossibleHp = maxHp(hitDice, level, con, maxPossible = true),
-      // Defense should be weighted heavier when considering AC
-      armorClass = Math.max(10, Math.max(dex, Math.max(con, convertInitialStat(p.defense) + 3))),
-      strength = str,
-      dexterity = dex,
-      constitution = con,
-      intelligence = int,
-      wisdom = wis,
-      charisma = cha,
-      movementSpeed = movementSpeed(dex),
-      availableMoves = dndMoves,
-      rolledMoves = rollForMoves(dndMoves, level)
-    )
+    val baseStats =
+      DnDStats(
+        name = name,
+        level = level,
+        challengeRating = cr,
+        nextEvolutionLevel = maybeDndEvoLevel.map(_.toInt),
+        hitDice = hitDice,
+        rolledMaxHp = maxHp(hitDice, level, con, maxPossible = false),
+        maxPossibleHp = maxHp(hitDice, level, con, maxPossible = true),
+        // Defense should be weighted heavier when considering AC
+        armorClass = Math.max(10, Math.max(dex, Math.max(con, convertInitialStat(p.defense)))),
+        strength = str,
+        dexterity = dex,
+        constitution = con,
+        intelligence = int,
+        wisdom = wis,
+        charisma = cha,
+        movementSpeed = movementSpeed(dex),
+        availableMoves = dndMoves,
+        rolledMoves = rollForMoves(dndMoves, level))
+
+    if (level != 1 || autoUpLevel) autoLevelUp(baseStats, level)
+    else baseStats
   }
 }
 

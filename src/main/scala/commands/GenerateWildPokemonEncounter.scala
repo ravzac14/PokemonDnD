@@ -11,8 +11,17 @@ object GenerateWildPokemonEncounter extends App {
   def genInteractive =
     for (_ <- 1 to numberOfChoices) yield {
       val randomPokemon = Random.rollForRandomPokemonFromBiome(biome)
-      GetPokemonDnDStats.statsAsString(randomPokemon, level.toInt)
-      val fullStatsQuery = scala.io.StdIn.readLine(s"Found ${randomPokemon.capitalize}. Do you want stats? y/n\n")
+      val fullStatsQuery = scala.io.StdIn.readLine(s"Found ${randomPokemon.capitalize}. Do you want stats? y/n/v\n")
       if (fullStatsQuery == "n") () // if no, pass, else full stats
+      else if (fullStatsQuery == "v") {
+        val stats = GetPokemonDnDStats.statsAsString(randomPokemon, level.toInt, autoLevelUp = true, verbose = true)
+        println(stats)
+      }
+      else {
+        val stats = GetPokemonDnDStats.statsAsString(randomPokemon, level.toInt, autoLevelUp = true, verbose = false)
+        println(stats)
+      }
     }
+
+  genInteractive
 }

@@ -22,6 +22,7 @@ Conversion|Normal|Spell|--|1 Minutes|Bonus Action|--|--|Change the user’s type
 Conversion 2|Normal|Spell|--|1 Minutes|Bonus Action|--|--|Choose a target; Change the user’s type to whatever the type of the Action was last used by the target for the duration.
 Copycat|Normal|Spell|--|Instant|Action|4,5,6|--|Copy the last move targeted against you (any pre-reqs also must be fulfilled by you).
 Covet|Normal|Spell|--|1 Minutes|Action|--|--|Gain advantage on investigation and perception checks for the duration.
+Crush Claw|Normal|Melee Attack|Touch|1d4+1 Rounds|Action|--|STR,DEX|1d10 + mod damage; on hit the target must make a DEX save or lose 1 AC for the duration.
 Cut|Normal|Melee Attack|Touch|Instant|Action|--|STR,DEX|1d8 + mod damage.
 Defense Curl|Normal|Spell|--|1 Minutes|Action|5,6|--|Gain +1 to your AC for the duration.
 Disable|Normal|Spell|30|1d8 Rounds|Reaction|6|--|After an attack or spell affects you and or an ally within range, it will be Disabled for the duration. Disabled meaning they forget they even know the move.
@@ -64,6 +65,7 @@ Helping Hand|Normal|Spell|10|10 Minutes|Action|OPSR|--|For the duration, while y
 Hidden Power|--|Ranged Attack|30/90|Instant|Action|--|DEX|1d8 + mod damage; this attack deals the same Type of damage as your trainer class Type Specialty (you choose one if you have more than 1), if you’re lvl 1 or 2 it deals normal Type damage.
 Hold Back|Normal|Spell|--|2 Rounds|Bonus Action|5,6|--|For the duration suffer disadvantage on your attacks, any targets you attempt to attack have disadvantage on saving throws.
 Hold Hands|Normal|Spell|Touch|Instant|Action|5,6|--|Hold hands with your Trainer increasing your happiness, gaining a bardic inspiration dice and curing Charm. This dice increases with your level (1 - d6, 5 - d8, 10 - d10, 15 - d12). 
+Horn Attack|Normal|Melee Attack|Touch|Instant|Action|--|STR|1d6 + mod damage and the target must make a STR saving throw or lose it’s movement it’s next turn.
 Horn Drill|Normal|Spell|--|Instant|Bonus Action|6|--|Empower your next Melee Attack Action with immense strength, at the cost of accuracy; Gain disadvantage on your next Melee Attack Action, but on hit deal deal 4x the damage dice value (stacks with crit). 
 Howl|Normal|Spell|--|Instant|Bonus Action|4,5,6|--|As long as you can hear you, gain advantage on your next attack action.
 Hyper Beam|Normal|Ranged Attack|80/240|Instant|Action|--|DEX,CON|2d12 + X + mod damage; where X is your trainer class level; If you hit with the attack make a DC 12 CON saving throw or forfeit your next action.
@@ -105,6 +107,7 @@ Recover|Normal|Spell|--|Instant|Action|6|--|Regain X health, where X is equal to
 Recycle|Normal|Trait|--|--|--|--|--|When you learn this move you instead gain the Pokemon Level Up Trait ‘Recycler’. Items used on this Pokemon have a 50% chance of gaining another use of it. 
 Reflect Type|Normal|Spell|--|Instant|Bonus Action|5,6|--|Choose a target, change your Type to be the same as your target for 1 minute.
 Refresh|Normal|Spell|--|Instant|Action|4,5,6|--|Cure Burn, Poison, and Paralysis on yourself.
+Retaliate|Normal|Melee Attack|Touch|Instant|Action|--|STR,DEX|1d8 + mod damage; this attack deals double damage if an ally has fainted this round.
 Roar|Normal|Spell|60|Instant|Action|5,6|--|Choose one target that can hear you within range, they must make a CHA save or be Feared until they are retracted or cured via item.
 Rock Climb|Normal|Trait|--|--|--|--|--|When you learn this move you instead gain the Pokemon Level Up Trait ‘Rock Climber’. This Pokemon can use its movement to climb objects  with no hindrance. Out of combat this Pokemon can easily carry it’s trainer up steep rock faces.
 Round|Normal|Melee Attack|Touch|Instant|Action|--|STR,DEX|Xd6 + mod damage, where X is the number of consecutive rounds this action has hit it’s target.
@@ -194,7 +197,7 @@ Aqua Ring|Water|Spell|30|1d4+1 Rounds|Action|6|--|Create a 15 ft zone within ran
 Aqua Tail|Water|Melee Attack|Touch|Instant|Action,Bonus Action|--|STR,DEX|1d10 + mod damage; Aqua Tail can be used as a Bonus Action if your Action was a Melee Attack.
 Brine|Water|Ranged Attack|70/210|Instant|Action|--|DEX,CON|1d8 + mod damage; if target has been attacked previously this round, the damage of this attack auto-crits.
 Bubble|Water|Ranged Attack|20/60|1 Rounds|Action|--|WIS,CHA|1d4 + modifier damage; target must make a CHA saving throw or have their movement is 0 until your next turn.
-Bubblebeam|Water|Ranged Attack|20/60|1 Rounds|Action|--|WIS,CHA|Make a Bubble attack against 1d4 targets;
+Bubble Beam|Water|Ranged Attack|20/60|1 Rounds|Action|--|WIS,CHA|Make a Bubble attack against 1d4 targets;
 Clamp|Water|Spell|Touch|Instant|Action|4,5,6|STR,CON|Choose an adjacent target; Target must make a strength saving throw or be grappled and take 1d8 + mod damage. As long as the target is still grappled you can use your Bonus Action in following turns to reapply the damage.
 Crabhammer|Water|Spell|--|Instant|Bonus Action|4,5,6|--|Add 1d10 to your next Melee Attack Action, it also crits on 18, 19, or 20.
 Dive|Water|Ranged Attack|30/90|1 Rounds|Action|--|STR,WIS|Can only be used in water; 1st turn, choose a target and dive underwater (most moves cannot hit you here at the discretion of the DM); 2nd turn, if your target has not moved this will auto-hit, otherwise make an attack roll; 1d12 + mod damage; You end this attack adjacent to your target whether you hit or miss them.
@@ -267,7 +270,7 @@ Needle Arm|Grass|Melee Attack|Touch|Instant|Action|--|STR,WIS|1d8 + mod damage; 
 Petal Blizzard|Grass|Melee Attack|Touch|Instant|Action|--|WIS,CON|Target all adjacent creatures with the following attack; 1d12 + mod damage; If you’ve used any Spore effects this turn they apply their effect to any targets hit by this attack.
 Petal Dance|Grass|Spell|--|Instant|Action|OPSR|--|Put yourself into a flower dancer’s stance resulting in the following effects.: Advantage on CON and WIS saves, all Melee Attack Actions you make hit in an aoe around you, any tiles adjacent to you count as difficult terrain, and you cannot make Reactions; Takes a Bonus Action to drop Petal Dance, and anytime you suffer from a status you must make a DC 12 CON save or drop Petal Dance.
 Power Whip|Grass|Spell|30|Instant|Action|4,5,6|STR,CON|Choose a target to make a STR saving throw or be grappled and take 1d10 + mod damage. As long as the target is still grappled you can use your Bonus Action in following turns to reapply the damage; You can also choose to break the grapple by throwing your target 30 ft in any direction as a Bonus Action.
-Leaf Blade|Grass|Ranged Attack|20/60|Instant|Action|--|DEX,CHA|1d8 + mod damage; This attack crits on 19 or 20.
+Razor Leaf|Grass|Ranged Attack|20/60|Instant|Action|--|DEX,CHA|1d8 + mod damage; This attack crits on 19 or 20.
 Seed Bomb|Grass|Ranged Attack|30/90|Instant|Action|5,6|DEX|Fire a large seed at a target; 1d6 + mod damage; Whenever you decide, or when you are retracted, or when the Seed is attacked it explodes dealing Xd6 damage, where X is the number of turns the Seed has been in play + 4.
 Sleep Powder|Grass|Spell|Touch|1 Minutes|Bonus Action|5,6|--|Release a cloud of sleep spores, all adjacent targets of your choosing must make a CON save or be put to Sleep.
 Solar Beam|Grass|Ranged Attack|80/240|2 Rounds|Action|--|DEX,WIS|1st turn, charge in the sunlight; 2nd turn, Xd12 + mod damage, where X is your prof bonus; If you are in Intense Sunlight skip the 1st turn.
@@ -308,6 +311,7 @@ Detect|Fighting|Spell|--|1 Rounds|Action|6|--|Choose one ally (can be yourself) 
 Double Kick|Fighting|Melee Attack|Touch|Instant|Action|--|STR,DEX|1d6 + mod damage; if the attack hits you can make one additional attack (using the same damage).
 Drain Punch|Fighting|Spell|--|Instant|Bonus Action|5,6|--|Your next Melee Attack Action heals you for half the damage done.
 Dynamic Chop|Fighting|Melee Attack|Touch|1 Minutes|Action|--|STR,DEX|1d12 + mod damage; If the target attacked you this round (before your turn) they are Confused. They can repeat their save at the end of their turn.
+Dynamic Punch|Fighting|Melee Attack|Touch|Instant|Action|--|STR,DEX|2d8 + mod damage + X, where X is your Trainer class level; You have disadvantage on this attack unless the target is Confused.
 Final Gambit|Fighting|Spell|30|Instant|Action|OPSR|--|Choose a target to make a DEX save or take X damage, where X is your remaining hp, or half on success; You faint after using this move.
 Flying Press|Fighting|Spell|--|Instant|Bonus Action|4,5,6|--|Your next Melee Attack Action can be considered Flying or Fighting Typed.
 Focus Blast|Fighting|Ranged Attack|80/240|Instant|Action|5,6|DEX,CON|Xd6 + mod damage; where X is double your prof bonus; on hit target must make a WIS save or have disadvantage on saves until the end of its next turn.
@@ -374,7 +378,7 @@ Magnitude|Ground|Spell|15|Instant|Action|5,6|STR|Direct a 5 ft wide by 15 ft lon
 Mud Bomb|Ground|Ranged Attack|30/90|1 Rounds|Action|--|DEX,WIS|1d6 + mod damage; Creatures within 5 ft of your target must make a DEX save or be Blinded for the duration; Gain an additional projectile at lvls 8, 14, and 20.
 Mud Shot|Ground|Spell|20|1 Rounds|Action|5,6|--|Spray mud in a line, forcing targets to make a DEX save or be Blinded and lose half their movement for the duration; successful saves only lose the movement.
 Mud Sport|Ground|Spell|30|1d6+1 Rounds|Action|6|--|You cover everywhere around you within range in mud for the duration; Any creatures in that zone resist electric type attacks; Creatures that end their movement in this area must make a DEX save or fall prone.
-Mud Slap|Ground|Ranged Attack|20/60|1 Rounds|Action|--|DEX,WIS|1d4 + mod damage; Target must make a DEX save or be Blinded.
+Mud-Slap|Ground|Ranged Attack|20/60|1 Rounds|Action|--|DEX,WIS|1d4 + mod damage; Target must make a DEX save or be Blinded.
 Rototiller|Ground|Spell|15|1d4+1 Rounds|Action|6|--|Only usable on dirt ground; Instantly till the ground within range of you; this area and anywhere you move for the duration are considered Tilled Ground; Tilled Ground - Ground and Grass Pokemon have their movement speed doubled when traveling through Tilled Ground; Grass Pokemon have advantage on Attack Actions while on Tilled Ground. 
 Sand Attack|Ground|Ranged Attack|20/60|1d4+2 Rounds|Action|--|DEX,INT|On hit the target cannot apply its prof bonus to its actions for 1d4 + 2 turns.
 Sand Tomb|Ground|Spell|60|1d4 Rounds|Action|5,6|--|Choose a target within range to make a DEX save or have 0 move speed for duration and take 1d4 damage at the start of each turn until they move.

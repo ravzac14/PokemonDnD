@@ -29,7 +29,7 @@ object EncounterGui extends SimpleSwingApplication {
     val pokemonStrings =
       for (_ <- 1 to numTargets) yield {
         val randomPokemon = Random.rollForRandomPokemonFromBiome(biome)
-        GetPokemonDnDStats.statsAsString(randomPokemon, level.toInt)
+        GetPokemonDnDStats.statsAsString(randomPokemon, level.toInt, autoLevelUp = true, verbose = false)
       }
 
     toLocalFile(pokemonStrings)

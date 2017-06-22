@@ -38,8 +38,8 @@ object GetPokemonDnDStats extends App {
       e.map(_.toString.replaceAll(".*alt=\"","").toLowerCase).takeWhile(!_.startsWith(pokemon)).length + 1
     }
     val evoMultiple: Float = maybeEvoNumber match {
-      case Some(1) if maybeEvos.get.length > 1 => .5f
-      case Some(2) if maybeEvos.get.length > 2 => 1f
+      case Some(1) if maybeEvos.exists(_.length > 1) => .5f
+      case Some(2) if maybeEvos.exists(_.length > 2) => 1f
       case _ => 2f
     }
     val maybeEvoLevel: Option[Int] = for {
@@ -50,7 +50,8 @@ object GetPokemonDnDStats extends App {
 
     val dataStats: Element = (doc >> elementList(".vitals-table")).head
     val dataList: Seq[String] = (dataStats >> elementList("tr")).drop(1) >> text("td")
-    val types: Seq[Types.Value] = PokemonList.typesForPokemon.get(pokemon.capitalize).get
+    val types: Seq[Types.Value] =
+      PokemonList.typesForPokemonKey.getOrElse(PokemonList.nameKey(pokemon), throw new Exception("Could not find Type!"))
     val typeMultiple: Int = types.length
     val height: Float = dataList.drop(2).head.replaceAll(" ", "").replaceAll(".*\\(","").replaceAll("m\\)","").toFloat
     val weight: Float = dataList.drop(3).head.replaceAll(" ", "").replaceAll(".*\\(","").replaceAll("kg\\)","").toFloat
@@ -79,7 +80,12 @@ object GetPokemonDnDStats extends App {
     }
   }
 
-  def statsAsString(pokemon: String, level: Int): String = {
+  def statsAsString(
+    pokemon: String,
+    level: Int,
+    autoLevelUp: Boolean = true,
+    verbose: Boolean = false,
+    withPokeStats: Boolean = true): String = {
     val tryStatsString =
       for {
         doc <- Try {
@@ -88,20 +94,28 @@ object GetPokemonDnDStats extends App {
         }
         pokemonStats <- Try(getPokemonStatsFromDoc(doc))
         (pokemonCR, pokemonEvoLevel) <- Try(getPokemonCRFromDoc(doc, pokemon))
-        pokemonMoves <- Try(getPokemonMovesFromDoc(doc))
+        pokemonMoves <- Try(getPokemonMovesFromDoc(doc).distinct)
         statsWithMoves = pokemonStats.copy(moves = pokemonMoves)
         dndStats <- Try(StatTransformers.pokemonToDndStats(
           name = pokemon,
           p = statsWithMoves,
           cr = pokemonCR,
           maybeEvoLevel = pokemonEvoLevel,
-          level = level))
-      } yield
-        s"""|${statsWithMoves.prettyPrint}
+          level = level,
+          autoUpLevel = autoLevelUp))
+      } yield {
+        val withMoves =
+          if (verbose)
+          "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+            dndStats.rolledMoves.map(_.verbosePrint)
+          else ""
+        s"""|${if (withPokeStats) statsWithMoves.prettyPrint else ""}
             |
-            |${dndStats.prettyPrint}
+            |${dndStats.print}
             |
+            |$withMoves
             |""".stripMargin
+      }
 
     val result = tryStatsString match {
       case Success(s) => s
@@ -111,18 +125,18 @@ object GetPokemonDnDStats extends App {
     s"""%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
        |%%%%                  ${pokemon.toUpperCase}
        |%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-       |
        |$result
-       |
      """.stripMargin
   }
 
   override def main(args: Array[String]) {
     val pokemon = args.head.trim.toLowerCase
-    require(data.PokemonList.pokemonKeyList.contains(pokemon), "That Pokemon doesn't exist!")
+    val verbose = args.contains("verbose")
+    val autoLevel = args.contains("autoLevel")
+    val withPoke = args.contains("withPoke")
+    require(data.PokemonList.pokemonKeyList.contains(PokemonList.nameKey(pokemon)), "That Pokemon doesn't exist!")
     val level = args.drop(1).headOption.map(_.toInt).getOrElse(1)
-    val statsString = statsAsString(pokemon, level)
-
+    val statsString = statsAsString(pokemon, level, autoLevel, verbose, withPoke)
     println(statsString)
   }
 }

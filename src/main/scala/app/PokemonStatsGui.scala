@@ -12,7 +12,7 @@ import scala.swing.event.ButtonClicked
 
 object PokemonStatsGui extends SimpleSwingApplication {
   def statsAsFile(pokemon: String, level: Int, path: Option[String] = None): File = {
-    val statString = GetPokemonDnDStats.statsAsString(pokemon, level)
+    val statString = GetPokemonDnDStats.statsAsString(pokemon, level, autoLevelUp = true, verbose = true)
     val now = new DateTime(DateTimeZone.forID("America/Los_Angeles"))
     val nowAsString = DateTimeFormat.forPattern("YYYY-MM-dd").print(now)
     val file = new File(path.getOrElse(s"${pokemon}_${level}_$nowAsString.txt"))

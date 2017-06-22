@@ -3,6 +3,15 @@ package data
 object PokemonList {
   val totalPokemon = 802
 
+  def nameKey(s: String) =
+    s
+      .toLowerCase
+      .replaceAll("-", "")
+      .replaceAll("\'", "")
+      .replaceAll(" ", "")
+      .replaceAll(",", "")
+      .replaceAll(".", "")
+
   lazy val pokemonByType: Map[Types.Value, Seq[String]] = indexMapWithTypes
     .toSeq
     .flatMap { case (index, (name, types)) => types.map(_ -> name) }
@@ -11,7 +20,10 @@ object PokemonList {
 
   lazy val typesForPokemon: Map[String, Seq[Types.Value]] = indexMapWithTypes.map(_._2)
 
-  lazy val pokemonKeyList: Seq[String] = indexMapWithTypes.values.map(_._1.toLowerCase).toSeq
+  lazy val pokemonKeyList: Seq[String] = indexMapWithTypes.values.map(m => nameKey(m._1)).toSeq
+
+  lazy val typesForPokemonKey: Map[String, Seq[Types.Value]] =
+    typesForPokemon.map(t => (nameKey(t._1), t._2))
 
   val indexMapWithTypes: Map[String, (String, Seq[Types.Value])] = Map(
     "001" -> ("Bulbasaur", Seq(Types.Grass, Types.Poison)),

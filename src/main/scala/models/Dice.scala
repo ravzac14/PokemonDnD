@@ -12,12 +12,12 @@ object Dice {
 
   private val r = scala.util.Random
 
-  def D20Roll = r.nextInt(19) + 1
-  def D12Roll = r.nextInt(11) + 1
-  def D10Roll = r.nextInt(9) + 1
+  def D20Roll = r.nextInt(20) + 1
+  def D12Roll = r.nextInt(12) + 1
+  def D10Roll = r.nextInt(10) + 1
   def D8Roll = r.nextInt(8) + 1
-  def D6Roll = r.nextInt(5) + 1
-  def D4Roll = r.nextInt(3) + 1
+  def D6Roll = r.nextInt(6) + 1
+  def D4Roll = r.nextInt(4) + 1
 
   def D20RollOrAverage = Math.max(D20Roll, D20Average)
   def D12RollOrAverage = Math.max(D12Roll, D12Average)
@@ -44,10 +44,10 @@ object Random {
 
   def rollForRandomPokemonFromBiome(biome: Biomes.Value): String = {
     val r = scala.util.Random
-    val pokemonFromBiome = data.Biomes.pokemonByBiome.get(biome)
-    require(pokemonFromBiome.isDefined, s"Given biome, $biome was not found in biome list: \n${Biomes.values}")
+    val pokemonFromBiome = data.Biomes.pokemonByBiome.getOrElse(biome, Seq())
+    require(pokemonFromBiome.nonEmpty, s"Given biome, $biome was not found in biome list: \n${Biomes.values}")
 
-    val randomNumber = r.nextInt(pokemonFromBiome.get.length - 1)
-    pokemonFromBiome.get(randomNumber)
+    val randomNumber = r.nextInt(pokemonFromBiome.length)
+    pokemonFromBiome(randomNumber)
   }
 }

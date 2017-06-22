@@ -34,12 +34,16 @@ case class DnDMove(
     s"""%%%%%%%%%%%%%%%%%%%%%%%%%%%%% $name %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         |Level: $levelString
         |Type(s): $typesString
-        |Move Type(s): $moveTypeString
-        |Range: $rangeString
-        |Duration: $durationString
-        |Casting Time(s): $castingTimeString
-        |Recharge Value(s): $rechargeValuesString
-        |Associated Abilities: $associatedAbilitiesString""".stripMargin
+        |Move Type(s): $moveTypeString""".stripMargin
+
+  def verbosePrint =
+    s"""$prettyPrint
+       |Range: $rangeString
+       |Duration: $durationString
+       |Casting Time(s): $castingTimeString
+       |Recharge Value(s): $rechargeValuesString
+       |Associated Abilities: $associatedAbilitiesString
+       |Desc: $description""".stripMargin
 
   def isDefault = nameKey == "tackle" || nameKey == "scratch" || nameKey == "pound"
 }
@@ -81,7 +85,6 @@ object DnDMoveBuilders {
   def fromPsvRow(row: String): DnDMove = {
     def isEmpty(s: String) = s.isEmpty || s == "--"
     val rowItems = row.split('|').map(_.trim.toLowerCase)
-    println(row)
     assert(rowItems.length == 9, s"Found malformed Move row [$row]")
     val name = if (!isEmpty(rowItems(0))) rowItems(0) else throw new MissingRequiredField("Name", row)
     val types = if (!isEmpty(rowItems(1))) Types.fromPsvRowItem(rowItems(1)) else Seq.empty

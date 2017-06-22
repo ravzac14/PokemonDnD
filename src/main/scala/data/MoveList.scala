@@ -15,5 +15,8 @@ object MoveList {
       .tail // Ditch the header
       .map(DnDMoveBuilders.fromPsvRow)
 
-  def default = allMoves.find(_.nameKey == "pound").get
+  def default =
+    allMoves
+      .find(_.nameKey == "pound")
+      .getOrElse(throw new Exception("Could not find Pound lol."))
 }
