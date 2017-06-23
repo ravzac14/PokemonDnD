@@ -4,23 +4,43 @@ import java.io.{PrintWriter, File}
 
 import commands.GetPokemonDnDStats
 import data.PokemonList
-import org.joda.time.format.DateTimeFormat
 import org.joda.time.{DateTime, DateTimeZone}
 
 import scala.swing._
 import scala.swing.event.ButtonClicked
+import scala.util.{Failure, Success, Try}
 
 object PokemonStatsGui extends SimpleSwingApplication {
-  def statsAsFile(pokemon: String, level: Int, path: Option[String] = None): File = {
-    val statString = GetPokemonDnDStats.statsAsString(pokemon, level, autoLevelUp = true, verbose = true)
+  def statsAsFile(
+    pokemon: String,
+    level: Int,
+    path: Option[String] = None,
+    autoLevelUp: Boolean = false,
+    shinyMove: Boolean = false): String = {
+    val statString =
+      Try {
+        GetPokemonDnDStats.statsAsString(
+          pokemon,
+          level,
+          autoLevelUp = autoLevelUp,
+          verbose = true,
+          shinyMove = shinyMove)
+      }
     val now = new DateTime(DateTimeZone.forID("America/Los_Angeles"))
-    val nowAsString = DateTimeFormat.forPattern("YYYY-MM-dd").print(now)
-    val file = new File(path.getOrElse(s"${pokemon}_${level}_$nowAsString.txt"))
-    new PrintWriter(file) {
-      write(statString)
-      close()
+    val nowAsString = now.toString("yyyy-MM-dd")
+    val file = new File(path.getOrElse(s"${pokemon.capitalize}_${level}_$nowAsString.txt"))
+    val result = statString.flatMap { s =>
+      Try {
+        new PrintWriter(file) {
+          write(s)
+          close()
+        }
+      }
     }
-    file
+    result match {
+      case Success(_) => file.getAbsolutePath
+      case Failure(ex) => ex.getMessage
+    }
   }
 
   def top = new MainFrame {
@@ -28,16 +48,20 @@ object PokemonStatsGui extends SimpleSwingApplication {
     preferredSize = GuiSettings.WindowSize
     val nameDropDown = GuiSettings.dropDownField(
       defaultText = "Pokemon name...",
-      items = PokemonList.pokemonKeyList.map(_.capitalize).sorted)
+      items = PokemonList.pokemonList.sorted)
     val levelDropDown = GuiSettings.dropDownField(
       defaultText = "Desired level...",
       items = 1 to 20)
     val output = GuiSettings.copyableOutput
     val button = GuiSettings.submitButton
+    val autoLevelCheckbox = GuiSettings.checkbox("Auto Level-Up?")
+    val shinyCheckbox = GuiSettings.checkbox("Find A Shiny Move?")
 
-    val gridPanel = new GridPanel(1, 2) {
+    val gridPanel = new GridPanel(2, 2) {
       contents += nameDropDown
       contents += levelDropDown
+      contents += autoLevelCheckbox
+      contents += shinyCheckbox
     }
 
     contents = new BorderPanel() {
@@ -52,10 +76,12 @@ object PokemonStatsGui extends SimpleSwingApplication {
 
     reactions += {
       case ButtonClicked(component) if component == button =>
-        val file = statsAsFile(
-          pokemon = nameDropDown.selection.item,
-          level = levelDropDown.selection.item)
-        output.text_=(file.getAbsolutePath)
+        val filePath = statsAsFile(
+          pokemon = PokemonList.nameKey(nameDropDown.selection.item),
+          level = levelDropDown.selection.item,
+          autoLevelUp = autoLevelCheckbox.enabled,
+          shinyMove = shinyCheckbox.enabled)
+        output.text_=(filePath)
     }
   }
 }

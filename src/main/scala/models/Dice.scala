@@ -35,7 +35,7 @@ object Random {
 
   def rollForRandomPokemon: String = {
     val r = scala.util.Random
-    val randomNumber = r.nextInt(data.PokemonList.totalPokemon - 1) + 1
+    val randomNumber = r.nextInt(data.PokemonList.totalPokemon) + 1
     data.PokemonList.indexMapWithTypes
       .find { case (k, (n, ts)) => k.dropWhile(_ == '0').toInt == randomNumber }
       .map(_._2._1)

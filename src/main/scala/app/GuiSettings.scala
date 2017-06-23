@@ -25,11 +25,19 @@ object GuiSettings {
   def copyableOutput = new TextArea {
     text = "Output"
     border = BorderFactory.createLineBorder(Color.black)
-    background = Color.red
+    background = Color.pink
   }
 
   def submitButton = new Button {
     text = "Submit"
+    foreground = Color.white
+    border = BorderFactory.createLineBorder(Color.red)
+    background = Color.black
+    borderPainted = true
+    enabled = true
+  }
+
+  def checkbox(text: String) = new CheckBox(text) {
     foreground = Color.white
     border = BorderFactory.createLineBorder(Color.red)
     background = Color.black

@@ -21,7 +21,7 @@ object MainGui extends SimpleSwingApplication {
     val encounterButton = new Button {
       text = "Generate an Encounter!"
       border = BorderFactory.createLineBorder(Color.black)
-      background = Color.red
+      background = Color.pink
       borderPainted = true
       enabled = true
     }

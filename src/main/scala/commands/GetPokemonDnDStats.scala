@@ -85,7 +85,8 @@ object GetPokemonDnDStats extends App {
     level: Int,
     autoLevelUp: Boolean = true,
     verbose: Boolean = false,
-    withPokeStats: Boolean = true): String = {
+    withPokeStats: Boolean = true,
+    shinyMove: Boolean = false): String = {
     val tryStatsString =
       for {
         doc <- Try {
@@ -102,12 +103,13 @@ object GetPokemonDnDStats extends App {
           cr = pokemonCR,
           maybeEvoLevel = pokemonEvoLevel,
           level = level,
-          autoUpLevel = autoLevelUp))
+          autoUpLevel = autoLevelUp,
+          shinyMove = shinyMove))
       } yield {
         val withMoves =
           if (verbose)
           "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
-            dndStats.rolledMoves.map(_.verbosePrint)
+            dndStats.rolledMoves.map(_.verbosePrint).mkString("\n")
           else ""
         s"""|${if (withPokeStats) statsWithMoves.prettyPrint else ""}
             |

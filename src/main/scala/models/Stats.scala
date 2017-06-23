@@ -266,13 +266,25 @@ object StatTransformers {
     else baseStats
   }
 
+  def rollForRandomShinyMove(movesSoFar: Seq[DnDMove], types: Seq[Types.Value]): DnDMove = {
+    def randomType = Types.values.toSeq(scala.util.Random.nextInt(Types.values.size))
+    def randomMove(t: Types.Value) =
+      MoveList.movesForType(t)(scala.util.Random.nextInt(MoveList.movesForType(t).length))
+    var r = randomType
+    while (types.contains(r)) { r = randomType }
+    var s = randomMove(r)
+    while (movesSoFar.contains(s)) { s = randomMove(r) }
+    s
+  }
+
   def pokemonToDndStats(
     name: String,
     p: PokemonBaseStats,
     cr: Int,
     maybeEvoLevel: Option[Int],
     level: Int = 1,
-    autoUpLevel: Boolean = false): DnDStats = {
+    autoUpLevel: Boolean = false,
+    shinyMove: Boolean = false): DnDStats = {
     val hitDice = nearestHitDice(roundUpToNearestTenAndDropAddThree(p.hp) - 3)
     val str = convertInitialStat(p.attack)
     val dex = convertInitialStat(p.speed)
@@ -283,7 +295,12 @@ object StatTransformers {
     val statMeanOrMin = Math.max((str + dex + con + int + wis) / 5, 6)
     val cha = trendTowardsMean(chaBase(statMeanOrMin, PokemonList.typesForPokemon.getOrElse(name, Seq.empty[Types.Value])))
     val maybeDndEvoLevel = maybeEvoLevel.map(l => Math.ceil(l.toDouble / 5d))
+    val types = PokemonList.typesForPokemonKey.getOrElse(PokemonList.nameKey(name), Seq())
     val dndMoves = pokemonToDndMoves(p.moves)
+    val rolledMoves = rollForMoves(dndMoves, level)
+    val maybeShinyMove =
+      if (shinyMove) Some(rollForRandomShinyMove(rolledMoves, types))
+      else None
 
     val baseStats =
       DnDStats(
@@ -304,7 +321,7 @@ object StatTransformers {
         charisma = cha,
         movementSpeed = movementSpeed(dex),
         availableMoves = dndMoves,
-        rolledMoves = rollForMoves(dndMoves, level))
+        rolledMoves = rolledMoves ++ maybeShinyMove.toSeq)
 
     if (level != 1 || autoUpLevel) autoLevelUp(baseStats, level)
     else baseStats

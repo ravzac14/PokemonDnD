@@ -29,7 +29,7 @@ object Biomes extends Enumeration {
     Aquatic -> Seq(Types.Water, Types.Ice),
     Abyss -> Seq(Types.Poison, Types.Ghost, Types.Steel, Types.Psychic, Types.Ice, Types.Dragon, Types.Dark, Types.Fairy),
     Urban -> Seq(Types.Normal, Types.Fighting, Types.Flying, Types.Poison, Types.Ghost, Types.Steel, Types.Electric, Types.Psychic, Types.Dark, Types.Fairy),
-    ANY -> Seq(Types.Normal, Types.Bug, Types.Grass, Types.Electric, Types.Poison, Types.Ground, Types.Rock, Types.Ghost, Types.Steel, Types.Fire, Types.Water, Types.Psychic, Types.Ice, Types.Dragon, Types.Dark, Types.Fairy, Types.Flying, Types.Fighting))
+    ANY -> Types.values.toSeq)
 
   lazy val pokemonByBiome: Map[Biomes.Value, Seq[String]] = typesForBiome.map {
     case (biome, types) => biome -> types.flatMap(PokemonList.pokemonByType.get).flatten

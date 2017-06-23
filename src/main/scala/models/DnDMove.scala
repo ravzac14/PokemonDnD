@@ -31,7 +31,7 @@ case class DnDMove(
   def nameKey = StatTransformers.stringKey(name)
   def simplePrint = s"level: ${level.getOrElse(1)} -- ${name.capitalize}"
   def prettyPrint =
-    s"""%%%%%%%%%%%%%%%%%%%%%%%%%%%%% $name %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    s"""%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ${name.capitalize} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         |Level: $levelString
         |Type(s): $typesString
         |Move Type(s): $moveTypeString""".stripMargin
